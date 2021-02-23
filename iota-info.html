@@ -1,0 +1,52 @@
+<script type="text/javascript">
+    RED.nodes.registerType('iotainfo',{
+        category: 'IOTA 1.5',
+        color: '#f6bbcf',
+        defaults: {
+            iotaNode: {value: "", type:"iota-server"},
+	          iotaValue: {value: "RHVGKQBYOJLCJQYZEVLN9HL99AAAFKPJTGAD9CFCYCBZNBBOWPQLNJMZCEE9OKYFPLZNJPBDLBQZEMWOX"},
+            iotaSelect: {value: "addresses"},
+            name: {value:""}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "iota.png",
+        label: function() {
+            return this.name||"iotainfo";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="iotainfo">
+    <div class="form-row">
+      <label for="node-function-iotaNode"><i class="fa fa-server"></i> IOTA node</label>
+      <input type="text" id="node-input-iotaNode" placeholder="node">
+    </div>
+
+    <div class="form-row">
+    <label for="node-function-iotaSelect"><i class="icon-tag"></i> Select Object</label>
+      <select id="node-input-iotaSelect">
+          <option value="addresses">addresses</option>
+          <option value="bundles">bundles</option>
+          <option value="tags">tags</option>
+          <option value="approvees">approvees</option>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <label for="node-function-iotaValue"><i class="icon-tasks"></i> Value Object</label>
+      <input type="text" id="node-input-iotaValue" placeholder="address, bundle, tag or approve">
+    </div>
+    <div class="form-row">
+      <label for="node-function-name"><i class="icon-tag"></i> Name</label>
+      <input type="text" id="node-input-name" class="paletteLabel" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="iotainfo">
+  <p>A node that work with IOTA</p>
+   <b>IOTAnode: </b> Setup IOTA Chrysalis node provider settings like host, port (14265 or 443 - are usual).<br><br>
+   <b>Select Object:</b> Enter yout type of transtaction to search.<br><br>
+  <p>In case of success <code>msg.payload</code> is set to data.</p>
+  <p>Read more about iota.js API: <a href="https://github.com/iotaledger/iota.js/tree/chrysalis/docs" target="_blank">here</a>.</p>
+</script>

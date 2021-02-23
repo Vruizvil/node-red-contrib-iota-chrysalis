@@ -1,0 +1,31 @@
+{
+  "name": "node-red-contrib-iota-Chrysalis",
+  "version": "1.0.0",
+  "description": "Node Red integration whith IOTA for Chrysalis",
+  "main": "iota-info.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "node-red": {
+    "nodes": {
+      "iotainfo" : "iota-info.js"
+    }
+  },
+  "author": "vruiz@wittelecom.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@iota/iota.js": "iotaledger/iota.js#chrysalis",
+    "transliteration": "^2.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Vruizvil/node-red-contrib-iota-Chrysalis.git"
+  },
+  "keywords": [
+    "node-red",
+    "iota",
+    "thetangle",
+    "tangle",
+    "chrysalis"
+  ]
+}

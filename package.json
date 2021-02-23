@@ -8,7 +8,8 @@
   },
   "node-red": {
     "nodes": {
-      "iotainfo" : "iota-info.js"
+      "iotainfo" : "iota-info.js",
+      "iotaservernode" : "iota-servernode.js"
     }
   },
   "author": "vruiz@wittelecom.com>",

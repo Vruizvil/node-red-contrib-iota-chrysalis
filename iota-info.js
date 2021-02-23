@@ -33,12 +33,12 @@ module.exports = function(RED) {
                         break;
                 case 'approvees':
                       //  objeto = {approvees:[iota_value]};
-                      
+
                         break;
                 }
 
                 console.log(objeto);
-                const info = await client.info();
+                // const info = await client.info();
                 client.info((error, success) => {
                   //console.log("Report from iota node:");
                   this.status({});

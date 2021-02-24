@@ -2,9 +2,10 @@
     RED.nodes.registerType('iotaserver',{
         category: 'config',
         defaults: {
-            host: {value:"https://nodes.thetangle.org",required:true},
+            host: {value:"https://api.lb-0.testnet.chrysalis2.com",required:true},
             port: {value:443,required:false,validate:RED.validators.number()},
         },
+        icon: "iota15.png",
         label: function() {
             return this.host+":"+this.port;
         }

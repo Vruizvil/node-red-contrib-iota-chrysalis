@@ -1,16 +1,16 @@
 <script type="text/javascript">
     RED.nodes.registerType('iotainfo',{
         category: 'IOTA 1.5',
-        color: '#f6bbcf',
+        color: '#3FADB5',
         defaults: {
             iotaNode: {value: "", type:"iotaserver"},
-	          iotaValue: {value: "RHVGKQBYOJLCJQYZEVLN9HL99AAAFKPJTGAD9CFCYCBZNBBOWPQLNJMZCEE9OKYFPLZNJPBDLBQZEMWOX"},
+	          iotaValue: {value: "8f5132a0390fffbe88819f557b668c2772a65e5a60b19a80d1a3fea726079653"},
             iotaSelect: {value: "info"},
             name: {value:""}
         },
         inputs:1,
         outputs:1,
-        icon: "iota.png",
+        icon: "iota15.png",
         label: function() {
             return this.name||"iotainfo";
         }
@@ -27,8 +27,8 @@
     <label for="node-function-iotaSelect"><i class="icon-tag"></i> Select Object</label>
       <select id="node-input-iotaSelect">
           <option value="info">info</option>
-          <option value="bundles">bundles</option>
-          <option value="tags">tags</option>
+          <option value="tips">bundles</option>
+          <option value="messageID">tags</option>
           <option value="approvees">approvees</option>
       </select>
     </div>

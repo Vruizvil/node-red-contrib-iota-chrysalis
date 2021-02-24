@@ -25,32 +25,41 @@ module.exports = function(RED) {
               var objeto;
               switch (config.iotaSelect){
                 case 'info':
-                        break;
-                case 'bundles':
-                        break;
-                case 'tags':
+                  client.info()
+                  .then(success => {
+                	   console.log("Done: ", success);
+        	                msg.payload=success;
+ 	                        self.send(msg);
+		                 console.log("fin success")})
+		              .catch(error => {
+                		 console.error(error);
+	                         msg.payload=error;
+         	                 self.send(msg);
+		                 console.log("fin error")})
+                    break;
+                case 'tips':
+                  client.tips()
+                  .then(success => {
+                	   console.log("Done: ", success);
+        	                msg.payload=success;
+ 	                        self.send(msg);
+		                 console.log("fin success")})
+		              .catch(error => {
+                		 console.error(error);
+	                         msg.payload=error;
+         	                 self.send(msg);
+		                 console.log("fin error")})
+                    break;
+                case 'messageID':
                         break;
                 case 'approvees':
                       //  objeto = {approvees:[iota_value]};
                         break;
                 }
+                //console.log(objeto);
 
-                console.log(objeto);
-
-		client.info()
-		        .then(success => {
-                		console.log("Done: ", success);
-        	                msg.payload=success;
- 	                        self.send(msg);
-		                console.log("fin success")})
-		        .catch(error => {
-                		 console.error(error);
-	                         msg.payload=error;
-         	                 self.send(msg);
-		                 console.log("fin error")})
-
-                  this.status({});
-		  self.readyIota = true;
+                this.status({});
+		            self.readyIota = true;
             }
         });
     }

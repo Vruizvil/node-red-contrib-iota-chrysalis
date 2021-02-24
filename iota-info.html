@@ -5,7 +5,7 @@
         defaults: {
             iotaNode: {value: "", type:"iota-server"},
 	          iotaValue: {value: "RHVGKQBYOJLCJQYZEVLN9HL99AAAFKPJTGAD9CFCYCBZNBBOWPQLNJMZCEE9OKYFPLZNJPBDLBQZEMWOX"},
-            iotaSelect: {value: "addresses"},
+            iotaSelect: {value: "info"},
             name: {value:""}
         },
         inputs:1,
@@ -26,7 +26,7 @@
     <div class="form-row">
     <label for="node-function-iotaSelect"><i class="icon-tag"></i> Select Object</label>
       <select id="node-input-iotaSelect">
-          <option value="addresses">addresses</option>
+          <option value="info">info</option>
           <option value="bundles">bundles</option>
           <option value="tags">tags</option>
           <option value="approvees">approvees</option>
@@ -35,7 +35,7 @@
 
     <div class="form-row">
       <label for="node-function-iotaValue"><i class="icon-tasks"></i> Value Object</label>
-      <input type="text" id="node-input-iotaValue" placeholder="address, bundle, tag or approve">
+      <input type="text" id="node-input-iotaValue" placeholder="info, bundle, tag or approve">
     </div>
     <div class="form-row">
       <label for="node-function-name"><i class="icon-tag"></i> Name</label>

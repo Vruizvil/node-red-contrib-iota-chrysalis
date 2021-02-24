@@ -10,7 +10,7 @@ module.exports = function(RED) {
         var iota_value = '';
         this.iotaNode = RED.nodes.getNode(config.iotaNode);
 
-        const client = new SingleNodeClient({'host': this.iotaNode.host, 'port': this.iotaNode.port});
+        const client = new SingleNodeClient(this.iotaNode.host + ":" + this.iotaNode.port);
         node.readyIota = true;
 
         node.on('input', function(msg) {
@@ -25,7 +25,6 @@ module.exports = function(RED) {
               var objeto;
               switch (config.iotaSelect){
                 case 'info':
-
                         break;
                 case 'bundles':
                         break;
@@ -33,26 +32,25 @@ module.exports = function(RED) {
                         break;
                 case 'approvees':
                       //  objeto = {approvees:[iota_value]};
-
                         break;
                 }
 
                 console.log(objeto);
-                // const info = await client.info();
-                client.info((error, success) => {
-                  //console.log("Report from iota node:");
+
+		client.info()
+		        .then(success => {
+                		console.log("Done: ", success);
+        	                msg.payload=success;
+ 	                        self.send(msg);
+		                console.log("fin success")})
+		        .catch(error => {
+                		 console.error(error);
+	                         msg.payload=error;
+         	                 self.send(msg);
+		                 console.log("fin error")})
+
                   this.status({});
-                  if (error) {
-                     console.log(error);
-                     msg.payload=error;
-                     self.send(msg);
-                  } else {
-                     console.log(success);
-                     msg.payload=success;
-                     self.send(msg);
-                  }
 		  self.readyIota = true;
-                });
             }
         });
     }

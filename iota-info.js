@@ -52,10 +52,13 @@ module.exports = function(RED) {
                     break;
                 case 'messageID':
                   //iota_value = msg.payload;
-                  client.message(iota_value)
+                  messageID = iota_value;
+                  client.message(messageID)
                   .then(success => {
                 	   console.log("Done: ", success);
         	                msg.payload=success;
+                          msg.payload.messageMetadata=client.messageMetadata(messageID);
+                          msg.payload.messageRaw=client.messageRaw(messageID)
  	                        self.send(msg);
 		                 console.log("fin success")})
 		              .catch(error => {

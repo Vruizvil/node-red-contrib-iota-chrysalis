@@ -51,8 +51,20 @@ module.exports = function(RED) {
 		                 console.log("fin error")})
                     break;
                 case 'messageID':
+                  //iota_value = msg.payload;
+                  client.message(iota_value)
+                  .then(success => {
+                	   console.log("Done: ", success);
+        	                msg.payload=success;
+ 	                        self.send(msg);
+		                 console.log("fin success")})
+		              .catch(error => {
+                		 console.error(error);
+	                         msg.payload=error;
+         	                 self.send(msg);
+		                 console.log("fin error")})
                         break;
-                case 'approvees':
+                case 'messageSubmit':
                       //  objeto = {approvees:[iota_value]};
                         break;
                 }

@@ -1,4 +1,4 @@
-const { SingleNodeClient } = require('@iota/iota.js');
+const { SingleNodeClient, Converter } = require('@iota/iota.js');
 const TRAN = require('transliteration');
 
 module.exports = function(RED) {
@@ -57,8 +57,12 @@ module.exports = function(RED) {
                   .then(success => {
                 	   console.log("Done: ", success);
         	                msg.payload=success;
-                          msg.payload.messageMetadata=client.messageMetadata(messageID);
-                          msg.payload.messageRaw=client.messageRaw(messageID)
+                          meta=client.messageMetadata(messageID);
+                          msg.payload.isSolid=meta.isSolid;
+                          msg.payload.shouldPromote=meta.shouldPromote;
+                          msg.payload.shouldReattach=meta.shouldReattach;
+                          messageRaw=client.messageRaw(messageID);
+                          msg.payload.messageRaw=Converter.bytesToHex(messageRaw);
  	                        self.send(msg);
 		                 console.log("fin success")})
 		              .catch(error => {

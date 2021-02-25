@@ -13,30 +13,34 @@ module.exports = function(RED) {
         const client = new SingleNodeClient(this.iotaNode.host + ":" + this.iotaNode.port);
         node.readyIota = true;
 
+
         node.on('input', function(msg) {
+            async function success(callback) {
+              console.log("Done: ", callback);
+              msg.payload=callback;
+              self.send(msg);
+              //return callback;
+            }
+            async function error(callback) {
+              console.log("Fail: ", callback);
+              console.error(callback);
+              msg.payload=callback;
+              self.send(msg);
+              //return callback;
+            }
+
             if (this.readyIota) {
               console.log("Searching dataset...")
               this.readyIota = false;
               var self = this;
               this.status({fill:"red",shape:"ring",text:"connecting"});
-
               iota_value = config.iotaValue;
 
               var objeto;
               switch (config.iotaSelect){
                 case 'info':
-                  client.info()
-                  .then(success => {
-                	   console.log("Done: ", success);
-        	                msg.payload=success;
- 	                        self.send(msg);
-		                 console.log("fin success")})
-		              .catch(error => {
-                		 console.error(error);
-	                         msg.payload=error;
-         	                 self.send(msg);
-		                 console.log("fin error")})
-                    break;
+                  client.info().then(success,error);
+                  break;
                 case 'tips':
                   client.tips()
                   .then(success => {

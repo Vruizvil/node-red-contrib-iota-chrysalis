@@ -31,20 +31,16 @@ module.exports = function(RED) {
 
             async function run_messageId(messageID) {
                   callback = await client.message(messageID).then(success,error);
-
                   meta = await client.messageMetadata(messageID).then(success,error);
-                  callback.isSolid=meta.isSolid;
-                  callback.referencedByMilestoneIndex=meta.referencedByMilestoneIndex;
-                  callback.ledgerInclusionState=meta.ledgerInclusionState;
-
                   messageRaw = await client.messageRaw(messageID).then(success,error);
                   raw = Converter.bytesToHex(messageRaw);
-                  callback.raw = raw;
-
-                  const decoded = deserializeMessage(new ReadStream(messageRaw));
-                  callback.decoded = logMessage("", decoded);
-
+                  //const decoded = deserializeMessage(new ReadStream(messageRaw));
+                  //callback.decoded = logMessage("", decoded);
                   msg.payload=callback;
+                  msg.payload.isSolid = meta.isSolid;
+                  msg.payload.referencedByMilestoneIndex = meta.referencedByMilestoneIndex;
+                  msg.payload.ledgerInclusionState = meta.ledgerInclusionState;
+                  msg.payload.raw = raw;
                   self.send(msg);
                   //return callback;
           }

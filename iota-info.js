@@ -30,17 +30,10 @@ module.exports = function(RED) {
             }
 
             async function run_messageId(messageID) {
-                  callback = await client.message(messageID) //.then(success,error);
-                  meta = await client.messageMetadata(messageID) //.then(success,error);
-                  messageRaw = await client.messageRaw(messageID) //.then(success,error);
-                  raw = Converter.bytesToHex(messageRaw);
-                  //const decoded = deserializeMessage(new ReadStream(messageRaw));
-                  //callback.decoded = logMessage("", decoded);
+                  callback = await client.message(messageID).then(success,error);
                   msg.payload=callback;
-                  msg.payload.isSolid = meta.isSolid;
-                  msg.payload.referencedByMilestoneIndex = meta.referencedByMilestoneIndex;
-                  msg.payload.ledgerInclusionState = meta.ledgerInclusionState;
-                  msg.payload.raw = raw;
+                  msg.payload.payload.index = Converter.hexToUtf8(callback.payload.index);
+                  msg.payload.payload.data = Converter.hexToUtf8(callback.payload.data);
                   self.send(msg);
                   //return callback;
           }
@@ -64,7 +57,8 @@ module.exports = function(RED) {
                 case 'messageID':
                   //iota_value = msg.payload;
                   messageID = iota_value;
-                  client.message(messageID).then(success,error);
+                  //client.message(messageID).then(success,error);
+                  run_messageId(messageID)
                   break;
                 case 'messageSubmit':
                       //  objeto = {approvees:[iota_value]};

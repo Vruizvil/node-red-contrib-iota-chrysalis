@@ -30,9 +30,9 @@ module.exports = function(RED) {
             }
 
             async function run_messageId(messageID) {
-                  callback = await client.message(messageID).then(success,error);
-                  meta = await client.messageMetadata(messageID).then(success,error);
-                  messageRaw = await client.messageRaw(messageID).then(success,error);
+                  callback = await client.message(messageID) //.then(success,error);
+                  meta = await client.messageMetadata(messageID) //.then(success,error);
+                  messageRaw = await client.messageRaw(messageID) //.then(success,error);
                   raw = Converter.bytesToHex(messageRaw);
                   //const decoded = deserializeMessage(new ReadStream(messageRaw));
                   //callback.decoded = logMessage("", decoded);
@@ -64,7 +64,7 @@ module.exports = function(RED) {
                 case 'messageID':
                   //iota_value = msg.payload;
                   messageID = iota_value;
-                  run_messageId(messageID).then(success,error);
+                  client.message(messageID).then(success,error);
                   break;
                 case 'messageSubmit':
                       //  objeto = {approvees:[iota_value]};

@@ -29,6 +29,27 @@ module.exports = function(RED) {
               //return callback;
             }
 
+            async function run_messageId(messageID) {
+                  callback = await client.message(messageID).then(success,error);
+
+                  meta = await client.messageMetadata(messageID).then(success,error);
+                  callback.isSolid=meta.isSolid;
+                  callback.referencedByMilestoneIndex=meta.referencedByMilestoneIndex;
+                  callback.ledgerInclusionState=meta.ledgerInclusionState;
+
+                  messageRaw = await client.messageRaw(messageID).then(success,error);
+                  raw = Converter.bytesToHex(messageRaw);
+                  callback.raw = raw;
+
+                  const decoded = deserializeMessage(new ReadStream(messageRaw));
+                  callback.decoded = logMessage("", decoded);
+
+                  msg.payload=callback;
+                  self.send(msg);
+                  //return callback;
+          }
+
+
             if (this.readyIota) {
               console.log("Searching dataset...")
               this.readyIota = false;
@@ -42,39 +63,13 @@ module.exports = function(RED) {
                   client.info().then(success,error);
                   break;
                 case 'tips':
-                  client.tips()
-                  .then(success => {
-                	   console.log("Done: ", success);
-        	                msg.payload=success;
- 	                        self.send(msg);
-		                 console.log("fin success")})
-		              .catch(error => {
-                		 console.error(error);
-	                         msg.payload=error;
-         	                 self.send(msg);
-		                 console.log("fin error")})
-                    break;
+                  client.tips().then(success,error);
+                  break;
                 case 'messageID':
                   //iota_value = msg.payload;
                   messageID = iota_value;
-                  client.message(messageID)
-                  .then(success => {
-                	   console.log("Done: ", success);
-        	                msg.payload=success;
-                          meta=client.messageMetadata(messageID);
-                          msg.payload.isSolid=meta.isSolid;
-                          msg.payload.shouldPromote=meta.shouldPromote;
-                          msg.payload.shouldReattach=meta.shouldReattach;
-                          messageRaw=client.messageRaw(messageID);
-                          msg.payload.messageRaw=Converter.bytesToHex(messageRaw);
- 	                        self.send(msg);
-		                 console.log("fin success")})
-		              .catch(error => {
-                		 console.error(error);
-	                         msg.payload=error;
-         	                 self.send(msg);
-		                 console.log("fin error")})
-                        break;
+                  run_messageId(messageID).then(success,error);
+                  break;
                 case 'messageSubmit':
                       //  objeto = {approvees:[iota_value]};
                         break;

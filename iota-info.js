@@ -58,7 +58,7 @@ module.exports = function(RED) {
                   //iota_value = msg.payload;
                   messageID = iota_value;
                   client.message(messageID).then(success,error);
-                  //run_messageId(messageID)
+                  //run_messageId(messageID);
                   break;
                 case 'messageSubmit':
                   //iota_value = msg.payload;

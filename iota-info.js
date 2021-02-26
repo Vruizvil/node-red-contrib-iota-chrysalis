@@ -32,11 +32,11 @@ module.exports = function(RED) {
                   await client.health()
                           .then(callback => {
                             console.log("Health Node: ", callback);
-                            this.status({fill:"green",shape:"ring",text:"Heathy"});
+                            self.status({fill:"green",shape:"ring",text:"Heathy"});
                           })
                           .catch(fail => {
                             console.log("Health Node: ", false);
-                            this.status({fill:"red",shape:"ring",text:"Wrong"});
+                            self.status({fill:"red",shape:"ring",text:"Wrong"});
                           })
             }
             async function run_messageId(messageID) {
@@ -49,9 +49,9 @@ module.exports = function(RED) {
             }
             if (this.readyIota) {
               console.log("Searching dataset...");
-              run_health();
               this.readyIota = false;
               var self = this;
+              run_health();
               //this.status({fill:"red",shape:"ring",text:"connecting"});
               iota_value = config.iotaValue;
 
@@ -84,7 +84,7 @@ module.exports = function(RED) {
                   break;
                 }
                 //this.status({});
-		            self.readyIota = true;
+		            this.readyIota = true;
             }
         });
     }

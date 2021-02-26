@@ -1,4 +1,7 @@
 const iotajs = require('@iota/iota.js');
+const convert = (from, to) => str => Buffer.from(str, from).toString(to);
+const utf8ToHex = convert('utf8', 'hex');
+const hexToUtf8 = convert('hex', 'utf8');
 module.exports = function(RED) {
     function iotainfo(config) {
         RED.nodes.createNode(this,config);
@@ -30,8 +33,8 @@ module.exports = function(RED) {
             async function run_messageId(messageID) {
                   callback = await client.message(messageID).then(success,error);
                   msg.payload=callback;
-                  msg.payload.payload.index = iotajs.Converter.hexToUtf8(callback.payload.index);
-                  msg.payload.payload.data = iotajs.Converter.hexToUtf8(callback.payload.data);
+                  msg.payload.payload.index = hexToUtf8(callback.payload.index);
+                  msg.payload.payload.data = hexToUtf8(callback.payload.data);
                   self.send(msg);
                   //return callback;
           }

@@ -1,6 +1,4 @@
-const { SingleNodeClient, Converter } = require('@iota/iota.js');
-const TRAN = require('transliteration');
-
+const iotajs = require('@iota/iota.js');
 module.exports = function(RED) {
     function iotainfo(config) {
         RED.nodes.createNode(this,config);
@@ -10,7 +8,7 @@ module.exports = function(RED) {
         var iota_value = '';
         this.iotaNode = RED.nodes.getNode(config.iotaNode);
 
-        const client = new SingleNodeClient(this.iotaNode.host + ":" + this.iotaNode.port);
+        const client = new iotajs.SingleNodeClient(this.iotaNode.host + ":" + this.iotaNode.port);
         node.readyIota = true;
 
 
@@ -32,8 +30,8 @@ module.exports = function(RED) {
             async function run_messageId(messageID) {
                   callback = await client.message(messageID).then(success,error);
                   msg.payload=callback;
-                  msg.payload.payload.index = Converter.hexToUtf8(callback.payload.index);
-                  msg.payload.payload.data = Converter.hexToUtf8(callback.payload.data);
+                  msg.payload.payload.index = iotajs.Converter.hexToUtf8(callback.payload.index);
+                  msg.payload.payload.data = iotajs.Converter.hexToUtf8(callback.payload.data);
                   self.send(msg);
                   //return callback;
           }
@@ -46,7 +44,6 @@ module.exports = function(RED) {
               this.status({fill:"red",shape:"ring",text:"connecting"});
               iota_value = config.iotaValue;
 
-              var objeto;
               switch (config.iotaSelect){
                 case 'info':
                   client.info().then(success,error);
@@ -57,15 +54,24 @@ module.exports = function(RED) {
                 case 'messageID':
                   //iota_value = msg.payload;
                   messageID = iota_value;
-                  //client.message(messageID).then(success,error);
-                  run_messageId(messageID)
+                  client.message(messageID).then(success,error);
+                  //run_messageId(messageID)
                   break;
                 case 'messageSubmit':
-                      //  objeto = {approvees:[iota_value]};
-                        break;
+                  //iota_value = msg.payload;
+                  messageTXT = iota_value;
+                  const submitMessage = {
+                        // Parents can be left undefined if you want the node to populate the field
+                        //parentMessageIds: client.tips().tipMessageIds.slice(0, iota_js_1.MAX_NUMBER_PARENTS),
+                        payload: {
+                          type: iotajs.INDEXATION_PAYLOAD_TYPE,
+                          index: iotajs.Converter.utf8ToHex("node-red-contrib-iota-Chrysalis"),
+                          data: iotajs.Converter.utf8ToHex(messageTXT)
+                        }
+                  };
+                  client.messageSubmit(submitMessage).then(success,error);
+                  break;
                 }
-                //console.log(objeto);
-
                 this.status({});
 		            self.readyIota = true;
             }

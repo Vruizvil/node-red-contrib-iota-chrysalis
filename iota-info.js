@@ -13,6 +13,18 @@ module.exports = function(RED) {
 
         const client = new iotajs.SingleNodeClient(this.iotaNode.host + ":" + this.iotaNode.port);
         node.readyIota = true;
+        async function run_health(callback) {
+              await client.health()
+                      .then(callback => {
+                        console.log("Health Node: ", callback);
+                        node.status({fill:"green",shape:"ring",text:"Heathy"});
+                      })
+                      .catch(fail => {
+                        console.log("Health Node: ", false);
+                        node.status({fill:"red",shape:"ring",text:"Unhealthy"});
+                      })
+        }
+        run_health();
 
         node.on('input', function(msg) {
             async function success(callback) {
@@ -28,17 +40,6 @@ module.exports = function(RED) {
               self.send(msg);
               //return callback;
             }
-            async function run_health(callback) {
-                  await client.health()
-                          .then(callback => {
-                            console.log("Health Node: ", callback);
-                            self.status({fill:"green",shape:"ring",text:"Heathy"});
-                          })
-                          .catch(fail => {
-                            console.log("Health Node: ", false);
-                            self.status({fill:"red",shape:"ring",text:"Wrong"});
-                          })
-            }
             async function run_messageId(messageID) {
                   callback = await client.message(messageID).then(success,error);
                   msg.payload=callback;
@@ -51,7 +52,6 @@ module.exports = function(RED) {
               console.log("Searching dataset...");
               this.readyIota = false;
               var self = this;
-              run_health();
               //this.status({fill:"red",shape:"ring",text:"connecting"});
               iota_value = config.iotaValue;
 

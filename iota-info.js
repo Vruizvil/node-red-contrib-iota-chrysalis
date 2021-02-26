@@ -14,7 +14,6 @@ module.exports = function(RED) {
         const client = new iotajs.SingleNodeClient(this.iotaNode.host + ":" + this.iotaNode.port);
         node.readyIota = true;
 
-
         node.on('input', function(msg) {
             async function success(callback) {
               console.log("Done: ", callback);
@@ -29,7 +28,17 @@ module.exports = function(RED) {
               self.send(msg);
               //return callback;
             }
-
+            async function run_health(callback) {
+                  await client.health()
+                          .then(callback => {
+                            console.log("Health Node: ", callback);
+                            this.status({fill:"green",shape:"ring",text:"Heathy"});
+                          })
+                          .catch(fail => {
+                            console.log("Health Node: ", false);
+                            this.status({fill:"red",shape:"ring",text:"Wrong"});
+                          })
+            }
             async function run_messageId(messageID) {
                   callback = await client.message(messageID).then(success,error);
                   msg.payload=callback;
@@ -37,14 +46,13 @@ module.exports = function(RED) {
                   msg.payload.payload.data = hexToUtf8(callback.payload.data);
                   self.send(msg);
                   //return callback;
-          }
-
-
+            }
             if (this.readyIota) {
-              console.log("Searching dataset...")
+              console.log("Searching dataset...");
+              run_health();
               this.readyIota = false;
               var self = this;
-              this.status({fill:"red",shape:"ring",text:"connecting"});
+              //this.status({fill:"red",shape:"ring",text:"connecting"});
               iota_value = config.iotaValue;
 
               switch (config.iotaSelect){
@@ -75,7 +83,7 @@ module.exports = function(RED) {
                   client.messageSubmit(submitMessage).then(success,error);
                   break;
                 }
-                this.status({});
+                //this.status({});
 		            self.readyIota = true;
             }
         });

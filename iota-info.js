@@ -16,11 +16,11 @@ module.exports = function(RED) {
         async function run_health(callback) {
               await client.health()
                       .then(callback => {
-                        console.log("Health Node: ", callback);
+                        //console.log("Health Node: ", callback);
                         node.status({fill:"green",shape:"ring",text:"Heathy"});
                       })
                       .catch(fail => {
-                        console.log("Health Node: ", false);
+                        //console.log("Health Node: ", false);
                         node.status({fill:"red",shape:"ring",text:"Unhealthy"});
                       })
         }

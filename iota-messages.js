@@ -48,26 +48,37 @@ module.exports = function(RED) {
                   self.send(msg);
                   //return callback;
             }
+            function see_args(callback) {
+              if (msg.payload !== null) {
+                callback = msg.payload;
+              } else {
+                callback = config.iotaValue;
+              }
+              console.log(callback);
+              return callback;
+            }
             if (this.readyIota) {
               console.log("Searching dataset...");
               this.readyIota = false;
               var self = this;
               //this.status({fill:"red",shape:"ring",text:"connecting"});
-              iota_value = config.iotaValue;
+              //iota_value = config.iotaValue;
 
               switch (config.iotaSelect){
                 case 'messageDeserialize':
-                messageRaw = iota_value;
-                if (msg.payload !== null) {
-                  messageRaw = msg.payload;
-                }
-                  iotajs.deserializeMessage(new iotajs.ReadStream(messageRaw)).then(success,error);
+                  //const ArgsFunction = iota_value;
+                  //if (msg.payload !== null) {
+                  //  messageRaw = msg.payload;
+                  //}
+                  console.log(see_args());
+                  iotajs.deserializeMessage(new iotajs.ReadStream(see_args())).then(success,error);
                   break;
                 case 'messageFind':
                   messageToFind = iota_value;
                   if (msg.payload !== null) {
                     messageToFind = msg.payload;
                   }
+                  console.log(messageToFind);
                   client.messagesFind(iotajs.Converter.utf8ToBytes(messageToFind)).then(success,error);
                   break;
                 case 'messageID':
@@ -75,6 +86,7 @@ module.exports = function(RED) {
                   if (msg.payload !== null) {
                     messageID = msg.payload;
                   }
+                  console.log(messageID);
                   client.message(messageID).then(success,error);
                   //run_messageId(messageID);
                   break;
@@ -84,6 +96,7 @@ module.exports = function(RED) {
                   if (msg.payload !== null) {
                     messageData = msg.payload;
                   }
+                  console.log(messageData);
                   const submitMessage = {
                         // Parents can be left undefined if you want the node to populate the field
                         //parentMessageIds: client.tips().tipMessageIds.slice(0, iota_js_1.MAX_NUMBER_PARENTS),

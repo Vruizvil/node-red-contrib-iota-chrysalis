@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    RED.nodes.registerType('iotainfo',{
+    RED.nodes.registerType('iotamessages',{
         category: 'IOTA 1.5',
         color: '#3FADB5',
         defaults: {
@@ -12,30 +12,30 @@
         outputs:1,
         icon: "iota15.png",
         label: function() {
-            return this.name||"info";
+            return this.name||"messages";
         }
     });
 </script>
 
-<script type="text/x-red" data-template-name="iotainfo">
+<script type="text/x-red" data-template-name="iotamessages">
     <div class="form-row">
       <label for="node-function-iotaNode"><i class="fa fa-server"></i> IOTA node</label>
       <input type="text" id="node-input-iotaNode" placeholder="node">
     </div>
 
     <div class="form-row">
-    <label for="node-function-iotaSelect"><i class="icon-tag"></i> Select Object</label>
+    <label for="node-function-iotaSelect"><i class="icon-tag"></i> Select Function</label>
       <select id="node-input-iotaSelect">
-          <option value="info">info</option>
-          <option value="tips">tips</option>
+          <option value="messageDeserialize">messageDeserialize</option>
+          <option value="messageFind">messageFind</option>
           <option value="messageID">messageID</option>
           <option value="messageSubmit">messageSubmit</option>
       </select>
     </div>
 
     <div class="form-row">
-      <label for="node-function-iotaValue"><i class="icon-tasks"></i> Value Object</label>
-      <input type="text" id="node-input-iotaValue" placeholder="info, tips, messageID or messageSubmit">
+      <label for="node-function-iotaValue"><i class="icon-tasks"></i> Args Function</label>
+      <input type="text" id="node-input-iotaValue" placeholder="messageDeserialize, messageFind, messageID or messageSubmit">
     </div>
     <div class="form-row">
       <label for="node-function-name"><i class="icon-tag"></i> Name</label>
@@ -43,7 +43,7 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="iotainfo">
+<script type="text/x-red" data-help-name="iotamessages">
   <p>A node that work with IOTA</p>
    <b>IOTAnode: </b> Setup IOTA Chrysalis node provider settings like host, port (14265 or 443 - are usual).<br><br>
    <b>Select Object:</b> Enter yout type of function to search.<br><br>

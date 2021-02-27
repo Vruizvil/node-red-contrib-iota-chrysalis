@@ -9,6 +9,7 @@
   "node-red": {
     "nodes": {
       "iotainfo" : "iota-info.js",
+      "iotamessages" : "iota-messages.js"
       "iotaserver" : "iota-server.js"
     }
   },

@@ -43,18 +43,25 @@ module.exports = function(RED) {
             async function run_messageId(messageID) {
                   callback = await client.message(messageID).then(success,error);
                   msg.payload=callback;
-                  msg.payload.payload.index = hexToUtf8(callback.payload.index);
-                  msg.payload.payload.data = hexToUtf8(callback.payload.data);
+		  console.log("hex to ascii: ", Buffer.from(callback.payload.index,'hex').toString('ascii'));
+                  msg.payload.payload.index = Buffer.from(callback.payload.index,'hex').toString('ascii');
+                  msg.payload.payload.data = Buffer.from(callback.payload.data,'hex').toString('ascii');
                   self.send(msg);
                   //return callback;
             }
-            function see_args(callback) {
-              if (msg.payload !== null) {
-                callback = msg.payload;
-              } else {
+	   function isEmpty(val){
+	        return (val === undefined || val == null || val.length <= 0) ? true : false;
+	   } 
+	   function isMessageID(val) {
+	        return (val.length = 64 && iotajs.Converter.isHex(val)) ? true : false;
+	   }
+           function see_args(callback) {
+		callback= msg.payload;
+ 		//console.log("init see_args: ", callback);
+              if (isEmpty(callback) || !isMessageID(callback)) {
                 callback = config.iotaValue;
-              }
-              console.log(callback);
+              } 
+              //console.log("end see_args: ", callback);
               return callback;
             }
             if (this.readyIota) {
@@ -82,13 +89,9 @@ module.exports = function(RED) {
                   client.messagesFind(iotajs.Converter.utf8ToBytes(messageToFind)).then(success,error);
                   break;
                 case 'messageID':
-                  messageID = iota_value;
-                  if (msg.payload !== null) {
-                    messageID = msg.payload;
-                  }
-                  console.log(messageID);
-                  client.message(messageID).then(success,error);
-                  //run_messageId(messageID);
+                  //console.log(see_args());
+                  //client.message(see_args()).then(success,error);
+                  run_messageId(messageID);
                   break;
                 case 'messageSubmit':
                   //iota_value = msg.payload;

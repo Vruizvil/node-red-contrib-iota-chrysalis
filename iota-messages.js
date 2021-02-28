@@ -41,9 +41,9 @@ module.exports = function(RED) {
               //return callback;
             }
             async function run_messageId(messageID) {
-                  callback = await client.message(messageID).then(success,error);
+                  callback = await client.message(messageID) //.then(success,error);
                   msg.payload=callback;
-		  console.log("hex to ascii: ", Buffer.from(callback.payload.index,'hex').toString('ascii'));
+		  console.log("Done : ", callback);
                   msg.payload.payload.index = Buffer.from(callback.payload.index,'hex').toString('ascii');
                   msg.payload.payload.data = Buffer.from(callback.payload.data,'hex').toString('ascii');
                   self.send(msg);
@@ -59,8 +59,14 @@ module.exports = function(RED) {
 		callback= msg.payload;
  		//console.log("init see_args: ", callback);
               if (isEmpty(callback) || !isMessageID(callback)) {
-                callback = config.iotaValue;
-              } 
+                callback = config.iotaValue; 
+	        if (isEmpty(callback) || !isMessageID(callback)){
+		   console.log("msg.payload incorrect messageID format: ", msg.payload);
+		   console.log("Args function incorrect messageID format: ", config.iotaValue);
+		   //callback = Buffer.from('0000000000000000000000000000000000000000000000000000000000000000','hex');
+		   callback = null;
+	        }
+              }
               //console.log("end see_args: ", callback);
               return callback;
             }
@@ -91,7 +97,13 @@ module.exports = function(RED) {
                 case 'messageID':
                   //console.log(see_args());
                   //client.message(see_args()).then(success,error);
-                  run_messageId(messageID);
+		  messageID = see_args()
+		  if (!isEmpty(messageID)) {
+			  run_messageId(messageID);
+		  } else {
+			msg.payload="Error: Incorrect messageID format";
+			self.send(msg);
+			}
                   break;
                 case 'messageSubmit':
                   //iota_value = msg.payload;

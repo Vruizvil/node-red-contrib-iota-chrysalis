@@ -1,4 +1,5 @@
 const iotajs = require('@iota/iota.js');
+const TRAN = require('transliteration');
 const convert = (from, to) => str => Buffer.from(str, from).toString(to);
 const utf8ToHex = convert('utf8', 'hex');
 const hexToUtf8 = convert('hex', 'utf8');
@@ -51,25 +52,45 @@ module.exports = function(RED) {
             }
 	   function isEmpty(val){
 	        return (val === undefined || val == null || val.length <= 0) ? true : false;
-	   } 
+	   }
 	   function isMessageID(val) {
 	        return (val.length = 64 && iotajs.Converter.isHex(val)) ? true : false;
 	   }
-           function see_args(callback) {
-		callback= msg.payload;
- 		//console.log("init see_args: ", callback);
-              if (isEmpty(callback) || !isMessageID(callback)) {
-                callback = config.iotaValue; 
-	        if (isEmpty(callback) || !isMessageID(callback)){
-		   console.log("msg.payload incorrect messageID format: ", msg.payload);
-		   console.log("Args function incorrect messageID format: ", config.iotaValue);
-		   //callback = Buffer.from('0000000000000000000000000000000000000000000000000000000000000000','hex');
-		   callback = null;
-	        }
+     function see_args(callback) {
+		     callback= msg.payload;
+ 		      //console.log("init see_args: ", callback);
+          if (isEmpty(callback) || !isMessageID(callback)) {
+                callback = config.iotaValue;
+	              if (isEmpty(callback) || !isMessageID(callback)){
+		                console.log("msg.payload incorrect messageID format: ", msg.payload);
+		                console.log("Args function incorrect messageID format: ", config.iotaValue);
+		                //callback = Buffer.from('0000000000000000000000000000000000000000000000000000000000000000','hex');
+		                callback = null;
+	              }
+          }
+          //console.log("end see_args: ", callback);
+          return callback;
+      }
+      function see_message(callback) {
+          messageData = iota_value;
+          if (!isEmpty(msg.payload)) {
+            messageData = msg.payload;
+          }
+          let txt = JSON.stringify(messageData);
+          messageData = TRAN.transliterate(txt);
+          console.log("Done: ", messageData);
+          const submitMessage = {
+              // Parents can be left undefined if you want the node to populate the field
+              //parentMessageIds: client.tips().tipMessageIds.slice(0, iota_js_1.MAX_NUMBER_PARENTS),
+              payload: {
+                type: iotajs.INDEXATION_PAYLOAD_TYPE,
+                index: iotajs.Converter.utf8ToHex("node-red-contrib-iota-Chrysalis"),
+                data: iotajs.Converter.utf8ToHex(messageData)
               }
-              //console.log("end see_args: ", callback);
-              return callback;
-            }
+          };
+          callback = submitMessage;
+          return callback;
+      }
             if (this.readyIota) {
               console.log("Searching dataset...");
               this.readyIota = false;
@@ -97,30 +118,17 @@ module.exports = function(RED) {
                 case 'messageID':
                   //console.log(see_args());
                   //client.message(see_args()).then(success,error);
-		  messageID = see_args()
-		  if (!isEmpty(messageID)) {
-			  run_messageId(messageID);
-		  } else {
-			msg.payload="Error: Incorrect messageID format";
-			self.send(msg);
-			}
+		              messageID = see_args()
+		              if (!isEmpty(messageID)) {
+			                 run_messageId(messageID);
+		              } else {
+			                 msg.payload="Error: Incorrect messageID format";
+			                 self.send(msg);
+			            }
                   break;
                 case 'messageSubmit':
                   //iota_value = msg.payload;
-                  messageData = iota_value;
-                  if (msg.payload !== null) {
-                    messageData = msg.payload;
-                  }
-                  console.log(messageData);
-                  const submitMessage = {
-                        // Parents can be left undefined if you want the node to populate the field
-                        //parentMessageIds: client.tips().tipMessageIds.slice(0, iota_js_1.MAX_NUMBER_PARENTS),
-                        payload: {
-                          type: iotajs.INDEXATION_PAYLOAD_TYPE,
-                          index: iotajs.Converter.utf8ToHex("node-red-contrib-iota-Chrysalis"),
-                          data: iotajs.Converter.utf8ToHex(messageData)
-                        }
-                  };
+                  submitMessage = see_message();
                   client.messageSubmit(submitMessage).then(success,error);
                   break;
                 }

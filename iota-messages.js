@@ -72,7 +72,7 @@ module.exports = function(RED) {
           return callback;
       }
       function see_message(callback) {
-          messageData = iota_value;
+          messageData = config.iotaValue;
           if (!isEmpty(msg.payload)) {
             messageData = msg.payload;
           }

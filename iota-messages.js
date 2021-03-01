@@ -108,8 +108,8 @@ module.exports = function(RED) {
                   iotajs.deserializeMessage(new iotajs.ReadStream(see_args())).then(success,error);
                   break;
                 case 'messageFind':
-                  messageToFind = iota_value;
-                  if (msg.payload !== null) {
+                  messageToFind = config.iotaValue;
+                  if (!isEmpty(msg.payload)) {
                     messageToFind = msg.payload;
                   }
                   console.log(messageToFind);

@@ -43,14 +43,6 @@ module.exports = function(RED) {
             function isEmpty(val){
                   return (val === undefined || val == null || val.length <= 0) ? true : false;
             }
-            async function run_messageId(messageID) {
-                  callback = await client.message(messageID).then(success,error);
-                  msg.payload=callback;
-                  msg.payload.payload.index = hexToUtf8(callback.payload.index);
-                  msg.payload.payload.data = hexToUtf8(callback.payload.data);
-                  self.send(msg);
-                  //return callback;
-            }
             async function run_milestone(lmi) {
               lmi = parseInt(config.iotaValue);
               if (!Number.isInteger(lmi)) {
@@ -91,19 +83,8 @@ module.exports = function(RED) {
                 case 'milestone':
                   run_milestone(iota_value);
                   break;
-                case 'messageSubmit':
-                  //iota_value = msg.payload;
-                  messageTXT = iota_value;
-                  const submitMessage = {
-                        // Parents can be left undefined if you want the node to populate the field
-                        //parentMessageIds: client.tips().tipMessageIds.slice(0, iota_js_1.MAX_NUMBER_PARENTS),
-                        payload: {
-                          type: iotajs.INDEXATION_PAYLOAD_TYPE,
-                          index: iotajs.Converter.utf8ToHex("node-red-contrib-iota-Chrysalis"),
-                          data: iotajs.Converter.utf8ToHex(messageTXT)
-                        }
-                  };
-                  client.messageSubmit(submitMessage).then(success,error);
+                case 'peers':
+                  client.peers().then(success,error);
                   break;
                 }
                 //this.status({});

@@ -66,6 +66,31 @@ module.exports = function(RED) {
                    }
                 //return milestone;
            }
+           async function run_milestoneUtxoChanges(lmi) {
+             lmi = parseInt(config.iotaValue);
+             if (!Number.isInteger(lmi)) {
+               lmi = null
+             }
+             if (!isEmpty(msg.payload)) {
+               lmi = parseInt(msg.payload)
+               if (isNaN(lmi) || !Number.isInteger(lmi)) {
+                 lmi = null
+               }
+             }
+                 if (lmi == null) {
+                    await client.info()
+                          .then(info => { //console.log("latestMilestoneIndex: ", info.latestMilestoneIndex);
+                                  const milestone = client.milestoneUtxoChanges(info.latestMilestoneIndex).then(success,error);
+                                  })
+                          .catch(fail => {console.log("Health Node: ", false);})
+                 } else {
+                          //console.log("specified MilestoneIndex: ", lmi);
+                          const milestone = client.milestoneUtxoChanges(lmi).then(success,error);
+                  }
+               //return milestone;
+          }
+
+
             if (this.readyIota) {
               console.log("Searching dataset...");
               this.readyIota = false;
@@ -83,8 +108,8 @@ module.exports = function(RED) {
                 case 'milestone':
                   run_milestone(iota_value);
                   break;
-                case 'peers':
-                  client.peers().then(success,error);
+                case 'milestoneUtxoChanges':
+                  run_milestoneUtxoChanges().then(success,error);
                   break;
                 }
                 //this.status({});

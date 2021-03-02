@@ -99,13 +99,14 @@ module.exports = function(RED) {
               //var orig_status = this.status();
               //this.status({fill:"blue",shape:"ring",text:"connecting"});
               switch (config.iotaSelect){
-                case 'messageDeserialize':
-                  //const ArgsFunction = iota_value;
-                  //if (msg.payload !== null) {
-                  //  messageRaw = msg.payload;
-                  //}
-                  console.log(see_args());
-                  iotajs.deserializeMessage(new iotajs.ReadStream(see_args())).then(success,error);
+                case 'messageChildren':
+                  messageID = see_args()
+                  if (!isEmpty(messageID)) {
+                     client.messageChildren(messageID).then(success,error);
+                   } else {
+                     msg.payload="Error: Incorrect messageID format";
+                     self.send(msg);
+                   }
                   break;
                 case 'messageFind':
                   messageToFind = config.iotaValue;

@@ -48,6 +48,18 @@ module.exports = function(RED) {
                   self.send(msg);
                   //return callback;
             }
+            async function run_milestone(lmi) {
+                  if (arguments[0] == null) {
+                     await client.info()
+                           .then(info => { console.log("latestMilestoneIndex: ", info.latestMilestoneIndex);
+                                           const milestone = client.milestone(info.latestMilestoneIndex).then(success,error);
+                                           })
+                           .catch(fail => {console.log("Health Node: ", false);})
+                  } else {
+                           console.log("specified MilestoneIndex: ", arguments[0]);
+                           const milestone = client.milestone(arguments[0]).then(success,error);
+                   }
+           }
             if (this.readyIota) {
               console.log("Searching dataset...");
               this.readyIota = false;
@@ -62,11 +74,10 @@ module.exports = function(RED) {
                 case 'tips':
                   client.tips().then(success,error);
                   break;
-                case 'messageID':
+                case 'milestone':
                   //iota_value = msg.payload;
-                  messageID = iota_value;
-                  client.message(messageID).then(success,error);
-                  //run_messageId(messageID);
+                  milestone = iota_value;
+                  run_milestone(milestone);
                   break;
                 case 'messageSubmit':
                   //iota_value = msg.payload;

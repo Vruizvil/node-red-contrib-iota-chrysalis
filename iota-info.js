@@ -40,6 +40,9 @@ module.exports = function(RED) {
               self.send(msg);
               //return callback;
             }
+            function isEmpty(val){
+                  return (val === undefined || val == null || val.length <= 0) ? true : false;
+            }
             async function run_messageId(messageID) {
                   callback = await client.message(messageID).then(success,error);
                   msg.payload=callback;
@@ -49,16 +52,27 @@ module.exports = function(RED) {
                   //return callback;
             }
             async function run_milestone(lmi) {
-                  if (arguments[0] == null) {
+              lmi = parseInt(config.iotaValue);
+              if (!Number.isInteger(lmi)) {
+                lmi = null
+              }
+              if (!isEmpty(msg.payload)) {
+                lmi = parseInt(msg.payload)
+                if (isNaN(lmi) || !Number.isInteger(lmi)) {
+                  lmi = null
+                }
+              }
+                  if (lmi == null) {
                      await client.info()
-                           .then(info => { console.log("latestMilestoneIndex: ", info.latestMilestoneIndex);
+                           .then(info => { //console.log("latestMilestoneIndex: ", info.latestMilestoneIndex);
                                            const milestone = client.milestone(info.latestMilestoneIndex).then(success,error);
                                            })
                            .catch(fail => {console.log("Health Node: ", false);})
                   } else {
-                           console.log("specified MilestoneIndex: ", arguments[0]);
-                           const milestone = client.milestone(arguments[0]).then(success,error);
+                           //console.log("specified MilestoneIndex: ", lmi);
+                           const milestone = client.milestone(lmi).then(success,error);
                    }
+                //return milestone;
            }
             if (this.readyIota) {
               console.log("Searching dataset...");
@@ -75,9 +89,7 @@ module.exports = function(RED) {
                   client.tips().then(success,error);
                   break;
                 case 'milestone':
-                  //iota_value = msg.payload;
-                  milestone = iota_value;
-                  run_milestone(milestone);
+                  run_milestone(iota_value);
                   break;
                 case 'messageSubmit':
                   //iota_value = msg.payload;

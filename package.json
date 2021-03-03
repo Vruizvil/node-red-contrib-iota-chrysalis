@@ -1,5 +1,5 @@
 {
-  "name": "node-red-contrib-iota-Chrysalis",
+  "name": "node-red-contrib-iota-chrysalis",
   "version": "1.0.0",
   "description": "Node Red integration whith IOTA for Chrysalis",
   "main": "iota-info.js",

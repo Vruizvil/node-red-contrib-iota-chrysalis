@@ -109,7 +109,7 @@ module.exports = function(RED) {
                   run_milestone(iota_value);
                   break;
                 case 'milestoneUtxoChanges':
-                  run_milestoneUtxoChanges().then(success,error);
+                  run_milestoneUtxoChanges();
                   break;
                 }
                 //this.status({});

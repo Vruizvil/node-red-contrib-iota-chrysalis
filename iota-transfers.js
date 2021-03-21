@@ -58,11 +58,16 @@ module.exports = function(RED) {
 	                return (val.length = 64 && iotajs.Converter.isHex(val)) ? true : false;
 	          }
             function isAddress(val) {
-              return true;
+                  return (val.length = 64 && iotajs.Converter.isHex(val)) ? true : false;
+            }
+            function isOutput(val) {
+                  return (val.length = 68 && iotajs.Converter.isHex(val)) ? true : false;
             }
             async function bech32ToHex(val) {
               const nodeInfo = await client.info();
-              return (iotajs.Converter.bytesToHex(iotajs.Bech32Helper.fromBech32(val, nodeInfo.bech32HRP).addressBytes));
+              callback = iotajs.Converter.bytesToHex(iotajs.Bech32Helper.fromBech32(val, nodeInfo.bech32HRP).addressBytes);
+              console.log("bech32ToHex: ", val, callback);
+              return callback;
             }
             function see_args(callback) {
 		            callback= msg.payload;
@@ -105,17 +110,17 @@ module.exports = function(RED) {
                 case 'AddressInfo':
                   addr_from = see_args()
                   if (!isEmpty(addr_from)) {
-                     msg.address = bech32ToHex(addr_from);
+                     msg.addressFrom = addr_from;
                    } else {
                      msg.payload="Error: Incorrect Address format";
                      self.send(msg);
                    }
                   client.address(addr_from).then(success,error);
                   break;
-                case 'OutputInfo':
+                case 'AddressOutput':
                   addr_from = see_args()
                   if (!isEmpty(addr_from)) {
-                     msg.address = bech32ToHex(addr_from);
+                     msg.addressFrom = addr_from;
                    } else {
                      msg.payload="Error: Incorrect Address format";
                      self.send(msg);

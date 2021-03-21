@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-iota-chrysalis",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Node Red integration whith IOTA for Chrysalis",
   "main": "iota-info.js",
   "scripts": {
@@ -10,6 +10,7 @@
     "nodes": {
       "iotainfo" : "iota-info.js",
       "iotamessages" : "iota-messages.js",
+      "iotatransfers" : "iota-transfers.js"
       "iotaserver" : "iota-server.js"
     }
   },

@@ -1,0 +1,64 @@
+<script type="text/javascript">
+    RED.nodes.registerType('iotatransfers',{
+        category: 'IOTA 1.5',
+        color: '#3FADB5',
+        defaults: {
+            iotaNode: {value: "", type:"iotaserver"},
+	          iotaValue: {value: "8f5132a0390fffbe88819f557b668c2772a65e5a60b19a80d1a3fea726079653"},
+            iotaSelect: {value: "messageID"},
+            name: {value:""}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "iota15.png",
+        label: function() {
+            return this.name||"iotatransfers";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="iotatransfers">
+    <div class="form-row">
+      <label for="node-function-iotaNode"><i class="fa fa-server"></i> IOTA node</label>
+      <input type="text" id="node-input-iotaNode" placeholder="node">
+    </div>
+
+    <div class="form-row">
+    <label for="node-function-iotaSelect"><i class="icon-tag"></i> Select Function</label>
+      <select id="node-input-iotaSelect">
+          <option value="AddressInfo">AddressInfo</option>
+          <option value="OutputInfo">OutputInfo</option>
+          <option value="New Wallet">NewWallet</option>
+          <option value="SendTokens">SendTokens</option>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <label for="node-function-iotaAddressFrom"><i class="icon-tasks"></i> Address From</label>
+      <input type="text" id="node-input-iotaValue" placeholder="address from, in Bech format">
+    </div>
+    <div class="form-row">
+      <label for="node-function-iotaAddressTo"><i class="icon-tasks"></i> Address To</label>
+      <input type="text" id="node-input-iotaValue" placeholder="address to, in Bech format">
+    </div>
+    <div class="form-row">
+      <label for="node-function-iotaValue"><i class="icon-tasks"></i> Amount To Send</label>
+      <input type="text" id="node-input-iotaValue" placeholder="insert amount to send in iota value units (i)">
+    </div>
+    <div class="form-row">
+      <label for="node-function-iotaMessage"><i class="icon-tasks"></i> Message To attach in transfer</label>
+      <input type="text" id="node-input-iotaMessage" placeholder="insert a message to attach with the transaction">
+    </div>
+    <div class="form-row">
+      <label for="node-function-name"><i class="icon-tag"></i> Name</label>
+      <input type="text" id="node-input-name" class="paletteLabel" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="iotatransfers">
+  <p>A node that work with IOTA</p>
+   <b>IOTAnode: </b> Setup IOTA Chrysalis node provider settings like host, port (14265 or 443 - are usual).<br><br>
+   <b>Select Object:</b> Enter yout type of function to search.<br><br>
+  <p>In case of success <code>msg.payload</code> is set to data.</p>
+  <p>Read more about iota.js API: <a href="https://github.com/iotaledger/iota.js/tree/chrysalis/docs" target="_blank">here</a>.</p>
+</script>

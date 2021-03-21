@@ -4,8 +4,11 @@
         color: '#3FADB5',
         defaults: {
             iotaNode: {value: "", type:"iotaserver"},
-	          iotaValue: {value: "8f5132a0390fffbe88819f557b668c2772a65e5a60b19a80d1a3fea726079653"},
-            iotaSelect: {value: "messageID"},
+	          iotaAddressFrom: {value: "atoi1qrtfsyxn6l3yt6hprxgwvkq9ph98x6ykk6xaaxyk5wwzpldxmkkac2s3rvy"},
+            iotaAddressTo: {value: ""},
+            iotaValue: {value: 1000000},
+            iotaMessage: {value: "message from node-red"},
+            iotaSelect: {value: "AddressInfo"},
             name: {value:""}
         },
         inputs:1,
@@ -42,11 +45,11 @@
       <input type="text" id="node-input-iotaAddressTo" placeholder="address to, in Bech format">
     </div>
     <div class="form-row">
-      <label for="node-function-iotaValue"><i class="icon-tasks"></i> Amount To Send</label>
+      <label for="node-function-iotaValue"><i class="icon-tasks"></i> Amount</label>
       <input type="text" id="node-input-iotaValue" placeholder="insert amount to send in iota value units (i)">
     </div>
     <div class="form-row">
-      <label for="node-function-iotaMessage"><i class="icon-tasks"></i> Message To attach in transfer</label>
+      <label for="node-function-iotaMessage"><i class="icon-tasks"></i> Message</label>
       <input type="text" id="node-input-iotaMessage" placeholder="insert a message to attach with the transaction">
     </div>
     <div class="form-row">

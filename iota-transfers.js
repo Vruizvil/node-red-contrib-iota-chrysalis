@@ -60,7 +60,7 @@ module.exports = function(RED) {
             function isAddress(val) {
               return true;
             }
-            function bech32ToHex(val) {
+            async function bech32ToHex(val) {
               const nodeInfo = await client.info();
               return (iotajs.Converter.bytesToHex(iotajs.Bech32Helper.fromBech32(val, nodeInfo.bech32HRP).addressBytes));
             }

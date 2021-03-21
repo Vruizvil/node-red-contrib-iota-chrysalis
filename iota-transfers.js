@@ -58,8 +58,8 @@ module.exports = function(RED) {
 	                return (val.length = 64 && iotajs.Converter.isHex(val)) ? true : false;
 	          }
             function isAddress(val) {
-                  const hex = bech32ToHex(val);
-                  return (hex.length = 64 && iotajs.Converter.isHex(hex)) ? true : false;
+                  return isMessageID(bech32ToHex(val));
+                  //return (bech32ToHex(val).length = 64 && iotajs.Converter.isHex(bech32ToHex(val))) ? true : false;
             }
             function isOutput(val) {
                   return (val.length = 68 && iotajs.Converter.isHex(val)) ? true : false;

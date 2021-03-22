@@ -14,13 +14,16 @@ module.exports = function(RED) {
 
         const client = new iotajs.SingleNodeClient(this.iotaNode.host + ":" + this.iotaNode.port);
         node.readyIota = true;
+        node.bech32HRP = "";
         async function run_health(callback) {
               await client.info()
                       .then(callback => {
                         //console.log("Health Node: ", callback);
                         if (callback.isHealthy) {
+                          node.bech32HRP = callback.bech32HRP;
                           node.status({fill:"green",shape:"ring",text:"Heathy"});
                         } else {
+                          node.bech32HRP = callback.bech32HRP;
                           node.status({fill:"red",shape:"ring",text:"Unhealthy"});
                         }
                       })
@@ -30,8 +33,7 @@ module.exports = function(RED) {
                       });
                     return callback;
         }
-        nodeInfo = {};
-        run_health().then(nodeInfo,error);
+        run_health();
         console.log("Health Node: ", nodeInfo);
         node.on('input', function(msg) {
             async function success(callback) {
@@ -58,7 +60,7 @@ module.exports = function(RED) {
                   //return callback;
             }
             function bech32ToHex(val) {
-              callback = iotajs.Converter.bytesToHex(iotajs.Bech32Helper.fromBech32(val, nodeInfo.bech32HRP).addressBytes);
+              callback = iotajs.Converter.bytesToHex(iotajs.Bech32Helper.fromBech32(val, node.bech32HRP).addressBytes);
               console.log("bech32ToHex: ", val, callback);
               return callback;
             }

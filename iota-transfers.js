@@ -62,11 +62,11 @@ module.exports = function(RED) {
               //callback = iotajs.Converter.bytesToHex(iotajs.Bech32Helper.fromBech32(val, node.bech32HRP).addressBytes)
               //console.log("bech32ToHex: ", val, callback);
               if (!iotajs.Bech32Helper.matches(val, node.bech32HRP)) {
-                ad = await client.addressEd25519(val);
+                ad = client.addressEd25519(val);
                 callback = iotajs.Bech32Helper.toBech32(iotajs.ED25519_ADDRESS_TYPE, iotajs.Converter.hexToBytes(ad.address), node.bech32HRP);
                 console.log("Hex to Bech32: ", val, callback);
               } else {
-                    ad = await client.address(val);
+                    ad = client.address(val);
                     callback = ad.address;
                     console.log("Bech32 to Hex: ", val, callback);
                     };

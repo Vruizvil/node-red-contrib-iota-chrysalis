@@ -34,7 +34,6 @@ module.exports = function(RED) {
                     return callback;
         }
         run_health();
-        console.log("Health Node HRP: ", node.bech32HRP);
         node.on('input', function(msg) {
             async function success(callback) {
               console.log("Done: ", callback);
@@ -68,7 +67,7 @@ module.exports = function(RED) {
 	                return (val === undefined || val == null || val.length <= 0) ? true : false;
 	          }
 	          function isMessageID(val) {
-                  console.log("isMessageID length isHex?: ", val, val.length, iotajs.Converter.isHex(val));
+                  //console.log("isMessageID length isHex?: ", val, val.length, iotajs.Converter.isHex(val));
 	                return (val.length = 64 && iotajs.Converter.isHex(val)) ? true : false;
 	          }
             function isAddress(val) {

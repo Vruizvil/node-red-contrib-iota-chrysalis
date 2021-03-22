@@ -75,6 +75,7 @@ module.exports = function(RED) {
  		             //console.log("init see_args: ", callback);
                 if (isEmpty(callback) || !isAddress(callback)) {
                   callback = config.iotaAddressFrom;
+                  console.log("Is Address? :", callback, isAddress(callback));
 	                 if (isEmpty(callback) || !isAddress(callback)){
 		                console.log("msg.payload incorrect address format: ", msg.payload);
 		                console.log("Args function incorrect address format: ", config.iotaAddressFrom);

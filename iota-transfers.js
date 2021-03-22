@@ -66,14 +66,8 @@ module.exports = function(RED) {
                   return (val.length = 68 && iotajs.Converter.isHex(val)) ? true : false;
             }
             async function bech32ToHex(val) {
-              await client.info()
-                .then(nodeInfo => {
-                  callback = iotajs.Converter.bytesToHex(iotajs.Bech32Helper.fromBech32(val, nodeInfo.bech32HRP).addressBytes);
-                  console.log("bech32ToHex: ", val, callback);
-                })
-                .catch(fail => {
-                  callback = fail;
-                })
+              callback = iotajs.Converter.bytesToHex(iotajs.Bech32Helper.fromBech32(val, client.info().bech32HRP).addressBytes);
+              console.log("bech32ToHex: ", val, callback);
               return callback;
             }
             function see_args(callback) {

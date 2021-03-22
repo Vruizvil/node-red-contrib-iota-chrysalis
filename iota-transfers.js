@@ -59,8 +59,20 @@ module.exports = function(RED) {
                   //return callback;
             }
             function bech32ToHex(val) {
-              callback = iotajs.Converter.bytesToHex(iotajs.Bech32Helper.fromBech32(val, node.bech32HRP).addressBytes);
-              console.log("bech32ToHex: ", val, callback);
+              callback = iotajs.Converter.bytesToHex(iotajs.Bech32Helper.fromBech32(val, node.bech32HRP).addressBytes)
+                .then(callback => {
+                  console.log("bech32ToHex: ", val, callback);
+                })
+                .catch(fail => {
+                  callback = iotajs.Converter.bytesToHex(iotajs.Bech32Helper.toBech32(iotajs.ED25519_ADDRESS_TYPE,val, node.bech32HRP).addressBytes)
+                    .then(callback => {
+                      console.log("hexToBech32: ", vall, callback);
+                    })
+                    .catch(fail => {
+                      console.log("Error address format: ", val, fail);
+                      callback = null;
+                    })
+                });
               return callback;
             }
 	          function isEmpty(val){

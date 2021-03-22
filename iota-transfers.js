@@ -15,6 +15,7 @@ module.exports = function(RED) {
         const client = new iotajs.SingleNodeClient(this.iotaNode.host + ":" + this.iotaNode.port);
         node.readyIota = true;
         async function run_health(callback) {
+              const nodeInfo = await client.info();
               await client.health()
                       .then(callback => {
                         //console.log("Health Node: ", callback);
@@ -55,7 +56,7 @@ module.exports = function(RED) {
 	                return (val === undefined || val == null || val.length <= 0) ? true : false;
 	          }
 	          function isMessageID(val) {
-                  console.log("isMessageID length isHex?: ", val.length, iotajs.Converter.isHex(val));
+                  console.log("isMessageID length isHex?: ", val, val.length, iotajs.Converter.isHex(val));
 	                return (val.length = 64 && iotajs.Converter.isHex(val)) ? true : false;
 	          }
             function isAddress(val) {
@@ -65,8 +66,8 @@ module.exports = function(RED) {
             function isOutput(val) {
                   return (val.length = 68 && iotajs.Converter.isHex(val)) ? true : false;
             }
-            async function bech32ToHex(val) {
-              const nodeInfo = await client.info();
+            function bech32ToHex(val) {
+              //const nodeInfo = await client.info();
               callback = iotajs.Converter.bytesToHex(iotajs.Bech32Helper.fromBech32(val, nodeInfo.bech32HRP).addressBytes);
               console.log("bech32ToHex: ", val, callback);
               return callback;

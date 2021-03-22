@@ -17,7 +17,7 @@ module.exports = function(RED) {
         async function run_health(callback) {
               await client.info()
                       .then(callback => {
-                        console.log("Health Node: ", callback);
+                        //console.log("Health Node: ", callback);
                         if (callback.isHealthy) {
                           node.status({fill:"green",shape:"ring",text:"Heathy"});
                         } else {
@@ -25,13 +25,13 @@ module.exports = function(RED) {
                         }
                       })
                       .catch(fail => {
-                        console.log("Health Node: ", callback);
+                        //console.log("Health Node: ", callback);
                         node.status({fill:"red",shape:"ring",text:"NoConnected"});
                       });
                     return callback;
         }
         const nodeInfo = run_health();
-
+        console.log("Health Node: ", nodeInfo);
         node.on('input', function(msg) {
             async function success(callback) {
               console.log("Done: ", callback);

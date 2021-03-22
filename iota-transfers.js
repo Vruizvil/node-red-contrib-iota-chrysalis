@@ -34,7 +34,7 @@ module.exports = function(RED) {
                     return callback;
         }
         run_health();
-        console.log("Health Node: ", nodeInfo);
+        console.log("Health Node HRP: ", node.bech32HRP);
         node.on('input', function(msg) {
             async function success(callback) {
               console.log("Done: ", callback);

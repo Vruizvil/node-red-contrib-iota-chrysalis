@@ -13,24 +13,24 @@ module.exports = function(RED) {
         this.iotaNode = RED.nodes.getNode(config.iotaNode);
 
         const client = new iotajs.SingleNodeClient(this.iotaNode.host + ":" + this.iotaNode.port);
-        const nodeInfo = {};
         node.readyIota = true;
         async function run_health(callback) {
-              let nodeInfo = await client.info()
+              await client.info()
                       .then(callback => {
-                        //console.log("Health Node: ", callback);
-                        if (nodeInfo.isHealthy) {
+                        console.log("Health Node: ", callback);
+                        if (callback.isHealthy) {
                           node.status({fill:"green",shape:"ring",text:"Heathy"});
                         } else {
                           node.status({fill:"red",shape:"ring",text:"Unhealthy"});
                         }
                       })
                       .catch(fail => {
-                        //console.log("Health Node: ", false);
+                        console.log("Health Node: ", callback);
                         node.status({fill:"red",shape:"ring",text:"NoConnected"});
-                      })
+                      });
+                    return callback;
         }
-        run_health();
+        const nodeInfo = run_health();
 
         node.on('input', function(msg) {
             async function success(callback) {

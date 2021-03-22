@@ -68,8 +68,8 @@ module.exports = function(RED) {
               } else {
                   ad = await client.addressEd25519(val);
                   ad_bech = iotajs.Bech32Helper.toBech32(iotajs.ED25519_ADDRESS_TYPE, iotajs.Converter.hexToBytes(ad.address), node.bech32HRP);
-                  callback = ad.address;
-                  console.log("Hex to Bech32: ", callback, ad_bech);
+                  console.log("Hex to Bech32: ", ad.address, ad_bech);
+                  callback = val;
                 };
               return callback;  //return Hex format
             }

@@ -58,19 +58,20 @@ module.exports = function(RED) {
                   self.send(msg);
                   //return callback;
             }
-            function bech32ToHex(val) {
+            async function bech32ToHex(val) {
               //callback = iotajs.Converter.bytesToHex(iotajs.Bech32Helper.fromBech32(val, node.bech32HRP).addressBytes)
               //console.log("bech32ToHex: ", val, callback);
-              if (!iotajs.Bech32Helper.matches(val, node.bech32HRP)) {
-                ad = client.addressEd25519(val);
-                callback = iotajs.Bech32Helper.toBech32(iotajs.ED25519_ADDRESS_TYPE, iotajs.Converter.hexToBytes(ad.address), node.bech32HRP);
-                console.log("Hex to Bech32: ", val, callback);
+              if (iotajs.Bech32Helper.matches(val, node.bech32HRP)) {
+                ad = await client.address(val);
+                callback = ad.address;
+                console.log("Bech32 to Hex: ", val, callback);
               } else {
-                    ad = client.address(val);
-                    callback = ad.address;
-                    console.log("Bech32 to Hex: ", val, callback);
-                    };
-              return callback;
+                  ad = await client.addressEd25519(val);
+                  ad_bech = iotajs.Bech32Helper.toBech32(iotajs.ED25519_ADDRESS_TYPE, iotajs.Converter.hexToBytes(ad.address), node.bech32HRP);
+                  callback = ad;
+                  console.log("Hex to Bech32: ", val, ad_bech);
+                };
+              return callback;  //return Hex format
             }
 	          function isEmpty(val){
 	                return (val === undefined || val == null || val.length <= 0) ? true : false;

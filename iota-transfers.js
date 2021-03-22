@@ -30,7 +30,8 @@ module.exports = function(RED) {
                       });
                     return callback;
         }
-        const nodeInfo = run_health();
+        nodeInfo = {};
+        run_health().then(nodeInfo,error);
         console.log("Health Node: ", nodeInfo);
         node.on('input', function(msg) {
             async function success(callback) {

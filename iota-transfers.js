@@ -55,6 +55,7 @@ module.exports = function(RED) {
 	                return (val === undefined || val == null || val.length <= 0) ? true : false;
 	          }
 	          function isMessageID(val) {
+                  console.log("isMessageID length isHex?: ", val.length, iotajs.Converter.isHex(val));
 	                return (val.length = 64 && iotajs.Converter.isHex(val)) ? true : false;
 	          }
             function isAddress(val) {

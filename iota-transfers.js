@@ -13,16 +13,21 @@ module.exports = function(RED) {
         this.iotaNode = RED.nodes.getNode(config.iotaNode);
 
         const client = new iotajs.SingleNodeClient(this.iotaNode.host + ":" + this.iotaNode.port);
+        const nodeInfo = {};
         node.readyIota = true;
         async function run_health(callback) {
-              await client.health()
+              let nodeInfo = await client.info()
                       .then(callback => {
                         //console.log("Health Node: ", callback);
-                        node.status({fill:"green",shape:"ring",text:"Heathy"});
+                        if (nodeInfo.isHealthy) {
+                          node.status({fill:"green",shape:"ring",text:"Heathy"});
+                        } else {
+                          node.status({fill:"red",shape:"ring",text:"Unhealthy"});
+                        }
                       })
                       .catch(fail => {
                         //console.log("Health Node: ", false);
-                        node.status({fill:"red",shape:"ring",text:"Unhealthy"});
+                        node.status({fill:"red",shape:"ring",text:"NoConnected"});
                       })
         }
         run_health();
@@ -51,6 +56,11 @@ module.exports = function(RED) {
                   self.send(msg);
                   //return callback;
             }
+            function bech32ToHex(val) {
+              callback = iotajs.Converter.bytesToHex(iotajs.Bech32Helper.fromBech32(val, nodeInfo.bech32HRP).addressBytes);
+              console.log("bech32ToHex: ", val, callback);
+              return callback;
+            }
 	          function isEmpty(val){
 	                return (val === undefined || val == null || val.length <= 0) ? true : false;
 	          }
@@ -64,11 +74,6 @@ module.exports = function(RED) {
             }
             function isOutput(val) {
                   return (val.length = 68 && iotajs.Converter.isHex(val)) ? true : false;
-            }
-            async function bech32ToHex(val) {
-              callback = iotajs.Converter.bytesToHex(iotajs.Bech32Helper.fromBech32(val, client.info().bech32HRP).addressBytes);
-              console.log("bech32ToHex: ", val, callback);
-              return callback;
             }
             function see_args(callback) {
 		            callback= msg.payload;

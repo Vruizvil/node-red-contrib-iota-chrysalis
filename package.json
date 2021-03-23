@@ -10,6 +10,7 @@
     "nodes": {
       "iotainfo" : "iota-info.js",
       "iotamessages" : "iota-messages.js",
+      "iotaaddress"  : "iota-address.js",
       "iotatransfers" : "iota-transfers.js",
       "iotaserver" : "iota-server.js"
     }

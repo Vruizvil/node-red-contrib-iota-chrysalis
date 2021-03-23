@@ -4,7 +4,7 @@ const convert = (from, to) => str => Buffer.from(str, from).toString(to);
 const utf8ToHex = convert('utf8', 'hex');
 const hexToUtf8 = convert('hex', 'utf8');
 module.exports = function(RED) {
-    function iotatransfers(config) {
+    function iotaaddress(config) {
         RED.nodes.createNode(this,config);
         var node = this;
         node._sec = 2;
@@ -88,18 +88,29 @@ module.exports = function(RED) {
             function isOutput(val) {
                   return (val.length = 68 && iotajs.Converter.isHex(val)) ? true : false;
             }
+            async function run_addr(callback) {
+                    addr = callback
+                    if (!iotajs.Bech32Helper.matches(addr, node.bech32HRP)) {
+                      ad = await client.addressEd25519(addr);
+                      bech_ad = iotajs.Bech32Helper.toBech32(iotajs.ED25519_ADDRESS_TYPE, iotajs.Converter.hexToBytes(ad.address), node.bech32HRP);
+                   } else {
+                         ad = await client.address(addr);
+                         bech_ad = addr;
+                         };
+                  console.log("Origen ADDR Hex Bech32: ", ad.address, bech_ad);
+                  return bech_ad;
+                 }
             function see_args(callback) {
 		            callback= msg.payload;
  		             //console.log("init see_args: ", callback);
-                if (isEmpty(callback) || !isAddress(callback)) {
+                if (isEmpty(callback))  {
                   callback = config.iotaAddressFrom;
-                  console.log("Is Address? :", callback, isAddress(callback));
-	                 if (isEmpty(callback) || !isAddress(callback)){
+                }
+                if (isEmpty(callback)) {
 		                console.log("msg.payload incorrect address format: ", msg.payload);
 		                console.log("Args function incorrect address format: ", config.iotaAddressFrom);
 		                callback = null;
 	                }
-                }
                 return callback;
             }
             function see_message(callback) {
@@ -128,18 +139,50 @@ module.exports = function(RED) {
               var self = this;
               switch (config.iotaSelect){
                 case 'AddressInfo':
+                  addr_from = see_args();
+                  if (!isEmpty(addr_from)) {
+                     bech32Addr = run_addr(addr_from);
+                     msg.addressFrom = bech32Addr;
+                   } else {
+                     msg.addressFrom = "Error: Incorrect Address format";
+                     break;
+                     //self.send(msg);
+                   }
+                  client.address(bech32Addr).then(success,error);
                   break;
                 case 'AddressOutput':
+                  addr_from = see_args();
+                  if (!isEmpty(addr_from)) {
+                     bech32Addr = run_addr(addr_from);
+                     msg.addressFrom = bech32Addr;
+                   } else {
+                     msg.addressFrom = "Error: Incorrect Address format";
+                     break;
+                     //self.send(msg);
+                   }
+                  client.addressOutputs(bech32Addr).then(success,error);
                   break;
-                case 'NewWallet':
-	                break;
-                case 'SendTokens':
-                  break;
+                case 'HexToBech32':
+                  addr_from = see_args();
+                  if (!isEmpty(addr_from)) {
+                     bech32Addr = run_addr(addr_from);
+                     msg.payload = bech32Addr;
+                     self.send(msg);
+                  }
+                break;
+                case 'Bech32ToHex':
+                  addr_from = see_args();
+                  if (!isEmpty(addr_from)) {
+                    bech32Addr = run_addr(addr_from);
+                    msg.payload = iotajs.Converter.bytesToHex(iotajs.Bech32Helper.fromBech32(bech32Addr, node.bech32HRP).addressBytes);
+                    self.send(msg);
+                  }
+                break;
                 }
                 //this.status(orig_status);
 		            this.readyIota = true;
             }
         });
     }
-    RED.nodes.registerType("iotatransfers",iotatransfers);
+    RED.nodes.registerType("iotaaddress",iotaaddress);
 }

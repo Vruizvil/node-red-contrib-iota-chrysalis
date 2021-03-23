@@ -1,13 +1,10 @@
 <script type="text/javascript">
-    RED.nodes.registerType('iotatransfers',{
+    RED.nodes.registerType('iotaaddress',{
         category: 'IOTA 1.5',
         color: '#3FADB5',
         defaults: {
             iotaNode: {value: "", type:"iotaserver"},
 	          iotaAddressFrom: {value: "atoi1qrtfsyxn6l3yt6hprxgwvkq9ph98x6ykk6xaaxyk5wwzpldxmkkac2s3rvy"},
-            iotaAddressTo: {value: ""},
-            iotaValue: {value: 1000000},
-            iotaMessage: {value: "message from node-red"},
             iotaSelect: {value: "AddressInfo"},
             name: {value:""}
         },
@@ -15,12 +12,12 @@
         outputs:1,
         icon: "iota15.png",
         label: function() {
-            return this.name||"iotatransfers";
+            return this.name||"iotaaddress";
         }
     });
 </script>
 
-<script type="text/x-red" data-template-name="iotatransfers">
+<script type="text/x-red" data-template-name="iotaaddress">
     <div class="form-row">
       <label for="node-function-iotaNode"><i class="fa fa-server"></i> IOTA node</label>
       <input type="text" id="node-input-iotaNode" placeholder="node">
@@ -29,8 +26,10 @@
     <div class="form-row">
     <label for="node-function-iotaSelect"><i class="icon-tag"></i> Select Function</label>
       <select id="node-input-iotaSelect">
-          <option value="NewWallet">NewWallet</option>
-          <option value="SendTokens">SendTokens</option>
+          <option value="AddressInfo">AddressInfo</option>
+          <option value="AddressOutput">AddressOutput</option>
+          <option value="HexToBech32">HexToBech32</option>
+          <option value="Bech32ToHex">Bech32ToHex</option>
       </select>
     </div>
 
@@ -39,24 +38,12 @@
       <input type="text" id="node-input-iotaAddressFrom" placeholder="Bech32 format address from">
     </div>
     <div class="form-row">
-      <label for="node-function-iotaAddressTo"><i class="icon-tasks"></i> AddressTo</label>
-      <input type="text" id="node-input-iotaAddressTo" placeholder="Bech32 format address to">
-    </div>
-    <div class="form-row">
-      <label for="node-function-iotaValue"><i class="icon-tasks"></i> Amount</label>
-      <input type="text" id="node-input-iotaValue" placeholder="integer amount to send in iota value units (i)">
-    </div>
-    <div class="form-row">
-      <label for="node-function-iotaMessage"><i class="icon-tasks"></i> Message</label>
-      <input type="text" id="node-input-iotaMessage" placeholder="insert a message to attach with the transaction">
-    </div>
-    <div class="form-row">
       <label for="node-function-name"><i class="icon-tag"></i> Name</label>
       <input type="text" id="node-input-name" class="paletteLabel" placeholder="Name">
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="iotatransfers">
+<script type="text/x-red" data-help-name="iotaaddress">
   <p>A node that work with IOTA</p>
    <b>IOTAnode: </b> Setup IOTA Chrysalis node provider settings like host, port (14265 or 443 - are usual).<br><br>
    <b>Select Object:</b> Enter yout type of function to search.<br><br>

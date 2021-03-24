@@ -120,22 +120,6 @@ module.exports = function(RED) {
                      self.send(msg);
                    }
                   break;
-                case 'HexToBech32':
-                  addr_from = see_args();
-                  if (!isEmpty(addr_from)) {
-                     run_addr(addr_from);
-                     msg.payload = msg.addressBech32;
-                     self.send(msg);
-                  }
-                break;
-                case 'Bech32ToHex':
-                  addr_from = see_args();
-                  if (!isEmpty(addr_from)) {
-                    run_addr(addr_from);
-                    msg.payload = iotajs.Converter.bytesToHex(iotajs.Bech32Helper.fromBech32(msg.addressBech32, node.bech32HRP).addressBytes);
-                    self.send(msg);
-                  }
-                break;
                 }
                 //this.status(orig_status);
 		            this.readyIota = true;

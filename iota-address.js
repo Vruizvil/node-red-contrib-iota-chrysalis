@@ -94,6 +94,7 @@ module.exports = function(RED) {
                      break;
                      //self.send(msg);
                    }
+                  console.log("msg.addressBech32: ", msg.addressBech32)
                   client.address(msg.addressBech32).then(success,error);
                   break;
                 case 'AddressOutput':

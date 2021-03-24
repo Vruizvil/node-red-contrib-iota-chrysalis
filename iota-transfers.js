@@ -58,49 +58,24 @@ module.exports = function(RED) {
                   self.send(msg);
                   //return callback;
             }
-            async function bech32ToHex(val) {
-              //callback = iotajs.Converter.bytesToHex(iotajs.Bech32Helper.fromBech32(val, node.bech32HRP).addressBytes)
-              //console.log("bech32ToHex: ", val, callback);
-              if (iotajs.Bech32Helper.matches(val, node.bech32HRP)) {
-                ad = await client.address(val);
-                callback = ad.address;
-                console.log("Bech32 to Hex: ", val, callback);
-              } else {
-                  ad = await client.addressEd25519(val);
-                  ad_bech = iotajs.Bech32Helper.toBech32(iotajs.ED25519_ADDRESS_TYPE, iotajs.Converter.hexToBytes(ad.address), node.bech32HRP);
-                  console.log("Hex to Bech32: ", ad.address, ad_bech);
-                  callback = val;
-                };
-              return callback;  //return Hex format
-            }
+
 	          function isEmpty(val){
 	                return (val === undefined || val == null || val.length <= 0) ? true : false;
 	          }
-	          function isMessageID(val) {
-                  //console.log("isMessageID length isHex?: ", val, val.length, iotajs.Converter.isHex(val));
-	                return (val.length = 64 && iotajs.Converter.isHex(val)) ? true : false;
-	          }
-            function isAddress(val) {
-                  add_hex = bech32ToHex(val);
-                  return isMessageID(add_hex);
-                  //return (bech32ToHex(val).length = 64 && iotajs.Converter.isHex(bech32ToHex(val))) ? true : false;
-            }
-            function isOutput(val) {
-                  return (val.length = 68 && iotajs.Converter.isHex(val)) ? true : false;
-            }
+
             function see_args(callback) {
 		            callback= msg.payload;
  		             //console.log("init see_args: ", callback);
-                if (isEmpty(callback) || !isAddress(callback)) {
+                if (isEmpty(callback)) {
                   callback = config.iotaAddressFrom;
-                  console.log("Is Address? :", callback, isAddress(callback));
-	                 if (isEmpty(callback) || !isAddress(callback)){
-		                console.log("msg.payload incorrect address format: ", msg.payload);
-		                console.log("Args function incorrect address format: ", config.iotaAddressFrom);
-		                callback = null;
-	                }
                 }
-                return callback;
+	              if (isEmpty(callback)) {
+		              console.log("msg.payload incorrect address format: ", msg.payload);
+		              console.log("Args function incorrect address format: ", config.iotaAddressFrom);
+		              callback = null;
+	              }
+              }
+              return callback;
             }
             function see_message(callback) {
               messageData = config.iotaMessage;
@@ -122,18 +97,70 @@ module.exports = function(RED) {
               callback = submitMessage;
               return callback;
             }
+
+            async function run_transfer(fromSeed,addressTo,amountToSend,messageKey,messageData) {
+                    addr = addressTo;
+                    if (!iotajs.Bech32Helper.matches(addr, node.bech32HRP)) {
+                      ad = await client.addressEd25519(addr);
+                      bech_ad = iotajs.Bech32Helper.toBech32(iotajs.ED25519_ADDRESS_TYPE, iotajs.Converter.hexToBytes(ad.address), node.bech32HRP);
+                    } else {
+                         ad = await client.address(addr);
+                         bech_ad = addr;
+                         };
+                  console.log("AddressTo Hex Bech32: ", ad.address, bech_ad);
+
+                  //Prepare Wallet Seed
+                  seed = fromSeed;
+                  const walletSeed = new iotajs.Ed25519Seed(iotajs.Converter.hexToBytes(seed));
+                  const walletPath = new iotajs.Bip32Path("m/44'/4218'/0'/0'/0'");
+                  const walletAddressSeed = walletSeed.generateSeedFromPath(walletPath);
+                  const walletEd25519Address = new iotajs.Ed25519Address(walletAddressSeed.keyPair().publicKey);
+                  const newAddress = walletEd25519Address.toAddress();
+                  const newAddressH = iotajs.Converter.bytesToHex(newAddress);
+                  const newAddressHex = await client.addressEd25519(newAddressH);
+                  const newAddressBech = iotajs.Bech32Helper.toBech32(iotajs.ED25519_ADDRESS_TYPE, newAddress, node.bech32HRP);
+                  console.log("Wallet Address From: ", newAddressHex, newAddressBech);
+
+                  //Prepare Outputs to send tokens
+                  output = [
+                       { addressBech32: bech_ad,
+                       amount: amountToSend,
+                       isDustAllowance: false }
+                       ];
+                   console.log("OutPut: ", output);
+
+                   //Prepare Message Payload
+                   let txt = JSON.stringify(messageData);
+                   messageData = TRAN.transliterate(txt);
+                   console.log("Done: ", messageData);
+                   const submitMessage = {
+                   payload: {
+                     key: iotajs.Converter.utf8ToHex(messageKey),
+                     data: iotajs.Converter.utf8ToHex(messageData)
+                     }
+                   };
+                   //const message2Id = await Iota.sendEd25519(client,walletSeed,0,ad.address,amountToSend,submitMessage.payload).then(success,error);
+                   const message2Id = await iotajs.sendMultiple(client, walletSeed,0, output, submitMessage.payload).then(success,error);
+
+                   console.log("Created Message Transfer Id", message2Id);
+                   const walletBalance = await iotajs.getBalance(client, walletSeed, 0);
+                   console.log("Wallet Address Balance", walletBalance);
+             }
+
             if (this.readyIota) {
               console.log("Running iota-transfers...");
               this.readyIota = false;
               var self = this;
               switch (config.iotaSelect){
-                case 'AddressInfo':
-                  break;
-                case 'AddressOutput':
-                  break;
                 case 'NewWallet':
 	                break;
                 case 'SendTokens':
+                  fromSeed = config.iotaAddressFrom;
+                  addressTo = config.iotaAddressTo;
+                  amountToSend = config.iotaValue;
+                  messageKey = "node-red-contrib-iota-Chrysalis transfers";
+                  messageData = config.iotaMessage;
+                  run_transfer(fromSeed,addressTo,amountToSend,messageKey,messageData);
                   break;
                 }
                 //this.status(orig_status);

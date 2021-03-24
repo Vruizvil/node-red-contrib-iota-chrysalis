@@ -88,7 +88,7 @@ module.exports = function(RED) {
                 case 'AddressInfo':
                   addr_from = see_args();
                   if (!isEmpty(addr_from)) {
-                     run_addr(addr_from);
+                     run_addr(addr_from).then(msg.addressBech32,msg.addressBech32);
                    } else {
                      msg.addressBech32 = "Error: Incorrect Address format";
                      break;

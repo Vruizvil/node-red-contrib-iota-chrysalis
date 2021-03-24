@@ -64,8 +64,25 @@ module.exports = function(RED) {
                          };
                   console.log("Address Hex Bech32: ", ad.address, bech_ad);
                   msg.addressBech32 = bech_ad;
+                  client.address(bech_ad).then(success,error);
                   //return bech_ad;
-                 }
+             }
+
+           async function run_addr_output(callback) {
+                   addr = callback
+                   if (!iotajs.Bech32Helper.matches(addr, node.bech32HRP)) {
+                     ad = await client.addressEd25519(addr);
+                     bech_ad = iotajs.Bech32Helper.toBech32(iotajs.ED25519_ADDRESS_TYPE, iotajs.Converter.hexToBytes(ad.address), node.bech32HRP);
+                   } else {
+                        ad = await client.address(addr);
+                        bech_ad = addr;
+                        };
+                 console.log("Address Hex Bech32: ", ad.address, bech_ad);
+                 msg.addressBech32 = bech_ad;
+                 client.addressOutputs(bech_ad).then(success,error);
+                 //return bech_ad;
+            }
+
             function see_args(callback) {
 		            callback= msg.payload;
  		             //console.log("init see_args: ", callback);
@@ -88,25 +105,20 @@ module.exports = function(RED) {
                 case 'AddressInfo':
                   addr_from = see_args();
                   if (!isEmpty(addr_from)) {
-                     run_addr(addr_from).then(msg.addressBech32,msg.addressBech32);
+                     run_addr(addr_from);
                    } else {
-                     msg.addressBech32 = "Error: Incorrect Address format";
-                     break;
-                     //self.send(msg);
+                     msg.payload = "Error: Incorrect Address format";
+                     self.send(msg);
                    }
-                  console.log("msg.addressBech32: ", msg.addressBech32)
-                  client.address(msg.addressBech32).then(success,error);
                   break;
                 case 'AddressOutput':
                   addr_from = see_args();
                   if (!isEmpty(addr_from)) {
-                     run_addr(addr_from);
+                     run_addr_output(addr_from);
                    } else {
-                     msg.addressBech32 = "Error: Incorrect Address format";
-                     break;
-                     //self.send(msg);
+                     msg.payload = "Error: Incorrect Address format";
+                     self.send(msg);
                    }
-                  client.addressOutputs(msg.addressBech32).then(success,error);
                   break;
                 case 'HexToBech32':
                   addr_from = see_args();

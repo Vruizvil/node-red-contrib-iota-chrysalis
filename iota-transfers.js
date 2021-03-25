@@ -108,10 +108,10 @@ module.exports = function(RED) {
                      "key": messageKey.toString(),
                      "data": messageData.toString()
                    };
-
-                   console.log("Payload message: ", JSON.stringify(submitMessage));
+                   submitPayload = JSON.stringify(submitMessage);
+                   console.log("Payload message: ", JSON.parse(submitPayload));
                    //const message2Id = await Iota.sendEd25519(client,walletSeed,0,ad.address,amountToSend,submitMessage.payload).then(success,error);
-                   const message2Id = await iotajs.sendMultiple(client, walletSeed,0, output, submitMessage).then(success,error);
+                   const message2Id = await iotajs.sendMultiple(client, walletSeed,0, output, JSON.parse(submitPayload)).then(success,error);
 
                    console.log("Created Message Transfer Id", message2Id);
                    const walletBalance = await iotajs.getBalance(client, walletSeed, 0);

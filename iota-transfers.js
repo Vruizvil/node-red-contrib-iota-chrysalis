@@ -99,8 +99,8 @@ module.exports = function(RED) {
                    console.log("OutPut: ", output);
 
                    //Prepare Message Payload
-                   let txt = JSON.stringify(messageData);
-                   messageData = TRAN.transliterate(txt);
+                   //let txt = JSON.stringify(messageData);
+                   //messageData = TRAN.transliterate(txt);
                    console.log("Message to Send: ", messageData);
                    const submitMessage = {
                    payload: {

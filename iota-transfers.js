@@ -76,7 +76,7 @@ module.exports = function(RED) {
                          ad = await client.address(addr);
                          bech_ad = addr;
                          };
-                  console.log("AddressTo Hex Bech32: ", ad.address, bech_ad);
+                  //console.log("AddressTo Hex Bech32: ", ad.address, bech_ad);
 
                   //Prepare Wallet Seed
                   seed = fromSeed;
@@ -88,34 +88,31 @@ module.exports = function(RED) {
                   const newAddressH = iotajs.Converter.bytesToHex(newAddress);
                   const newAddressHex = await client.addressEd25519(newAddressH);
                   const newAddressBech = iotajs.Bech32Helper.toBech32(iotajs.ED25519_ADDRESS_TYPE, newAddress, node.bech32HRP);
-                  console.log("Wallet Address From: ", newAddressHex, newAddressBech);
+                  //console.log("Wallet Address From: ", newAddressHex, newAddressBech);
 
-                  //Prepare Outputs to send tokens
-                  submitOutput = [
+                  //Prepare Outputs to sendMultiple addresses
+                  submitOutputs = [
                        { addressBech32: bech_ad,
                        amount: parseInt(amountToSend),
                        isDustAllowance: false }
                        ];
-                   console.log("OutPut: ", submitOutput);
-                   jsonOutput = JSON.stringify(submitOutput);
+                   jsonOutputs = JSON.stringify(submitOutputs);
+                   //console.log("Submit Output : ", typeof(submitOutputs), typeof(jsonOutputs), jsonOutputs);
+
                    amount = parseInt(amountToSend);
+
                    //Prepare Message Payload
-                   //let txt = JSON.stringify(messageData);
-                   //messageData = TRAN.transliterate(txt);
-                   console.log("Message to Send: ", messageData);
                    var submitMessage = {
-                    //key: iotajs.Converter.utf8ToHex(messageKey),
-                     //data: iotajs.Converter.utf8ToHex(messageData)
-                     key: messageKey.toString(),
-                     data: messageData.toString()
+                     key: iotajs.Converter.utf8ToHex(messageKey.toString()),
+                     data: iotajs.Converter.utf8ToHex(messageData.toString())
                    };
                    jsonMessage = JSON.stringify(submitMessage);
-                   console.log("Submit Output : ", typeof(submitOutput), typeof(jsonOutput), jsonOutput);
-                   console.log("Submit Message: ", typeof(submitMessage), typeof(jsonMessage), jsonMessage);
-                   //const message2Id = await iotajs.send(client, walletSeed, 0, bech_ad, amount, jsonMessage).then(success,error);
-                   const message2Id = await iotajs.sendMultiple(client, walletSeed,0, jsonOutput, jsonMessage).then(success,error);
+                   //console.log("Submit Message: ", typeof(submitMessage), typeof(jsonMessage), jsonMessage);
 
-                   console.log("Created Message Transfer Id", message2Id);
+                   const message2Id = await iotajs.send(client, walletSeed, 0, bech_ad, amount, jsonMessage).then(success,error);
+                   //const message2Id = await iotajs.sendMultiple(client, walletSeed,0, jsonOutputs, jsonMessage).then(success,error);
+
+                   console.log("Created Message Transfer Id", message2Id.messageId);
                    const walletBalance = await iotajs.getBalance(client, walletSeed, 0);
                    console.log("Wallet Address Balance", walletBalance);
              }

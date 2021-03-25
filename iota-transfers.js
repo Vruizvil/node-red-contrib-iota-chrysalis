@@ -108,6 +108,7 @@ module.exports = function(RED) {
                      data: iotajs.Converter.utf8ToHex(messageData)
                      }
                    };
+                   console.log("Payload message: ", submitMessage.payload);
                    //const message2Id = await Iota.sendEd25519(client,walletSeed,0,ad.address,amountToSend,submitMessage.payload).then(success,error);
                    const message2Id = await iotajs.sendMultiple(client, walletSeed,0, output, submitMessage.payload).then(success,error);
 
@@ -127,7 +128,7 @@ module.exports = function(RED) {
                   fromSeed = config.iotaAddressFrom;
                   addressTo = config.iotaAddressTo;
                   amountToSend = config.iotaValue;
-                  messageKey = "node-red-contrib-iota-Chrysalis transfers";
+                  messageKey = "node-red-contrib-iota-Chrysalis";
                   messageData = config.iotaMessage;
                   run_transfer(fromSeed, addressTo, amountToSend, messageKey, messageData);
                   break;

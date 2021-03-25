@@ -104,8 +104,10 @@ module.exports = function(RED) {
                    console.log("Message to Send: ", messageData);
                    const submitMessage = {
                    payload: {
-                     key: iotajs.Converter.utf8ToHex(messageKey),
-                     data: iotajs.Converter.utf8ToHex(messageData)
+                     //key: iotajs.Converter.utf8ToHex(messageKey),
+                     //data: iotajs.Converter.utf8ToHex(messageData)
+                     key: messageKey.toString(),
+                     data: messageData.toString()
                      }
                    };
                    console.log("Payload message: ", submitMessage.payload);

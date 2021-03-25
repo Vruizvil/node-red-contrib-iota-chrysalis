@@ -97,7 +97,7 @@ module.exports = function(RED) {
                        isDustAllowance: false }
                        ];
                    console.log("OutPut: ", submitOutput);
-                   jsonOutput = JSON.stringify(submitOutput);
+                   jsonOutput = JSON.stringify(submitOutput[0]);
                    //Prepare Message Payload
                    //let txt = JSON.stringify(messageData);
                    //messageData = TRAN.transliterate(txt);

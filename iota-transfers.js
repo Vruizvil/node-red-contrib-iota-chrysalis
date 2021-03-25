@@ -97,7 +97,7 @@ module.exports = function(RED) {
                        isDustAllowance: false }
                        ];
                    jsonOutputs = JSON.stringify(submitOutputs);
-                   //console.log("Submit Output : ", typeof(submitOutputs), typeof(jsonOutputs), jsonOutputs);
+                   console.log("Submit Output : ", typeof(submitOutputs), typeof(jsonOutputs), jsonOutputs);
 
                    amount = parseInt(amountToSend);
 
@@ -110,7 +110,7 @@ module.exports = function(RED) {
                    //console.log("Submit Message: ", typeof(submitMessage), typeof(jsonMessage), jsonMessage);
 
                    const message2Id = await iotajs.send(client, walletSeed, 0, bech_ad, amount, submitMessage).then(success,error);
-                   //const message2Id = await iotajs.sendMultiple(client, walletSeed,0, jsonOutputs, jsonMessage).then(success,error);
+                   //const message2Id = await iotajs.sendMultiple(client, walletSeed,0, jsonOutputs, submitMessage).then(success,error);
 
                    console.log("Created Message Transfer Id", message2Id.messageId);
                    const walletBalance = await iotajs.getBalance(client, walletSeed, 0);

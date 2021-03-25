@@ -48,16 +48,6 @@ module.exports = function(RED) {
               self.send(msg);
               //return callback;
             }
-            async function run_messageId(messageID) {
-                  callback = await client.message(messageID) //.then(success,error);
-                  msg.payload=callback;
-		              console.log("Done : ", callback);
-                  msg.payload.messageId = messageID;
-                  msg.payload.payload.index = Buffer.from(callback.payload.index,'hex').toString('ascii');
-                  msg.payload.payload.data = Buffer.from(callback.payload.data,'hex').toString('ascii');
-                  self.send(msg);
-                  //return callback;
-            }
 
 	          function isEmpty(val){
 	                return (val === undefined || val == null || val.length <= 0) ? true : false;
@@ -74,27 +64,6 @@ module.exports = function(RED) {
 		              console.log("Args function incorrect address format: ", config.iotaAddressFrom);
 		              callback = null;
 	              }
-              }
-              return callback;
-            }
-            function see_message(callback) {
-              messageData = config.iotaMessage;
-              if (!isEmpty(msg.payload)) {
-                messageData = msg.payload;
-              }
-              let txt = JSON.stringify(messageData);
-              messageData = TRAN.transliterate(txt);
-              console.log("Done: ", messageData);
-              const submitMessage = {
-              // Parents can be left undefined if you want the node to populate the field
-              //parentMessageIds: client.tips().tipMessageIds.slice(0, iota_js_1.MAX_NUMBER_PARENTS),
-              payload: {
-                type: iotajs.INDEXATION_PAYLOAD_TYPE,
-                index: iotajs.Converter.utf8ToHex("node-red-contrib-iota-Chrysalis"),
-                data: iotajs.Converter.utf8ToHex(messageData)
-                }
-              };
-              callback = submitMessage;
               return callback;
             }
 
@@ -132,7 +101,7 @@ module.exports = function(RED) {
                    //Prepare Message Payload
                    let txt = JSON.stringify(messageData);
                    messageData = TRAN.transliterate(txt);
-                   console.log("Done: ", messageData);
+                   console.log("Message to Send: ", messageData);
                    const submitMessage = {
                    payload: {
                      key: iotajs.Converter.utf8ToHex(messageKey),
@@ -160,7 +129,7 @@ module.exports = function(RED) {
                   amountToSend = config.iotaValue;
                   messageKey = "node-red-contrib-iota-Chrysalis transfers";
                   messageData = config.iotaMessage;
-                  run_transfer(fromSeed,addressTo,amountToSend,messageKey,messageData);
+                  run_transfer(fromSeed, addressTo, amountToSend, messageKey, messageData);
                   break;
                 }
                 //this.status(orig_status);

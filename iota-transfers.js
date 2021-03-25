@@ -106,13 +106,10 @@ module.exports = function(RED) {
                      key: messageKey.toString(),
                      data: messageData.toString()
                    };
-                   jsonMessage = JSON.stringify(submitMessage);
-                   //console.log("Submit Message: ", typeof(submitMessage), typeof(jsonMessage), jsonMessage);
 
-                   const message2Id = await iotajs.send(client, walletSeed, 0, bech_ad, amount, submitMessage).then(success,error);
-                   //const message2Id = await iotajs.sendMultiple(client, walletSeed,0, jsonOutputs, submitMessage).then(success,error);
+                   await iotajs.send(client, walletSeed, 0, bech_ad, amount, submitMessage).then(success,error);
+                   //await iotajs.sendMultiple(client, walletSeed,0, jsonOutputs, submitMessage).then(success,error);
 
-                   console.log("Created Message Transfer Id", message2Id.messageId);
                    const walletBalance = await iotajs.getBalance(client, walletSeed, 0);
                    console.log("Wallet Address Balance", walletBalance);
              }

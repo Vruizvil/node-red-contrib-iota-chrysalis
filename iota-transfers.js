@@ -103,16 +103,15 @@ module.exports = function(RED) {
                    //messageData = TRAN.transliterate(txt);
                    console.log("Message to Send: ", messageData);
                    const submitMessage = {
-                   payload: {
-                     //key: iotajs.Converter.utf8ToHex(messageKey),
+                    //key: iotajs.Converter.utf8ToHex(messageKey),
                      //data: iotajs.Converter.utf8ToHex(messageData)
                      key: messageKey.toString(),
                      data: messageData.toString()
-                     }
                    };
+
                    console.log("Payload message: ", submitMessage.payload);
                    //const message2Id = await Iota.sendEd25519(client,walletSeed,0,ad.address,amountToSend,submitMessage.payload).then(success,error);
-                   const message2Id = await iotajs.sendMultiple(client, walletSeed,0, output, submitMessage.payload).then(success,error);
+                   const message2Id = await iotajs.sendMultiple(client, walletSeed,0, output, submitMessage).then(success,error);
 
                    console.log("Created Message Transfer Id", message2Id);
                    const walletBalance = await iotajs.getBalance(client, walletSeed, 0);

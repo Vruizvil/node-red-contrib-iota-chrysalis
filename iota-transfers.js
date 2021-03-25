@@ -110,7 +110,8 @@ module.exports = function(RED) {
                      data: messageData.toString()
                    };
                    jsonMessage = JSON.stringify(submitMessage);
-                   console.log("Payload message: ", typeof(submitMessage), typeof(jsonMessage), jsonMessage);
+                   console.log("Submit Output : ", typeof(submitOutput), typeof(jsonOutput), jsonOutput);
+                   console.log("Submit Message: ", typeof(submitMessage), typeof(jsonMessage), jsonMessage);
                    //const message2Id = await iotajs.send(client, walletSeed, 0, bech_ad, amount, jsonMessage).then(success,error);
                    const message2Id = await iotajs.sendMultiple(client, walletSeed,0, jsonOutput, jsonMessage).then(success,error);
 

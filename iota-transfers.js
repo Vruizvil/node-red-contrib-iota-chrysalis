@@ -93,11 +93,12 @@ module.exports = function(RED) {
                   //Prepare Outputs to send tokens
                   submitOutput = [
                        { addressBech32: bech_ad,
-                       amount: amountToSend,
+                       amount: parseInt(amountToSend),
                        isDustAllowance: false }
                        ];
                    console.log("OutPut: ", submitOutput);
                    jsonOutput = JSON.stringify(submitOutput[0]);
+                   amount = parseInt(amountToSend);
                    //Prepare Message Payload
                    //let txt = JSON.stringify(messageData);
                    //messageData = TRAN.transliterate(txt);
@@ -110,7 +111,7 @@ module.exports = function(RED) {
                    };
                    jsonMessage = JSON.stringify(submitMessage);
                    console.log("Payload message: ", typeof(submitMessage), typeof(jsonMessage), jsonMessage);
-                   const message2Id = await iotajs.send(client, walletSeed, 0, bech_ad, amountToSend, jsonMessage).then(success,error);
+                   const message2Id = await iotajs.send(client, walletSeed, 0, bech_ad, amount, jsonMessage).then(success,error);
                    //const message2Id = await iotajs.sendMultiple(client, walletSeed,0, jsonOutput, jsonMessage).then(success,error);
 
                    console.log("Created Message Transfer Id", message2Id);

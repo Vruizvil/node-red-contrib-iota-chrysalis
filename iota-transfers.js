@@ -101,10 +101,10 @@ module.exports = function(RED) {
 
                    amount = parseInt(amountToSend);
 
-                   //Prepare Message Payload
+                   //Prepare Message Payload iotajs.Converter.utf8ToHex(messageKey.toString())
                    var submitMessage = {
-                     key: iotajs.Converter.utf8ToHex(messageKey.toString()),
-                     data: iotajs.Converter.utf8ToHex(messageData.toString())
+                     key: messageKey.toString(),
+                     data: messageData.toString()
                    };
                    jsonMessage = JSON.stringify(submitMessage);
                    //console.log("Submit Message: ", typeof(submitMessage), typeof(jsonMessage), jsonMessage);

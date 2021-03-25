@@ -106,7 +106,7 @@ module.exports = function(RED) {
                     //key: iotajs.Converter.utf8ToHex(messageKey),
                      //data: iotajs.Converter.utf8ToHex(messageData)
                      key: messageKey.toString(),
-                     data: messageData.toString()
+                     data: JSON.stringify(messageData.toString())
                    };
 
                    console.log("Payload message: ", submitMessage);

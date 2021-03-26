@@ -57,11 +57,11 @@ module.exports = function(RED) {
 		            callback= msg.payload;
  		             //console.log("init see_args: ", callback);
                 if (isEmpty(callback)) {
-                  callback = config.iotaAddressFrom;
+                  callback = config.iotaSeedKey;
                 }
 	              if (isEmpty(callback)) {
 		              console.log("msg.payload incorrect address format: ", msg.payload);
-		              console.log("Args function incorrect address format: ", config.iotaAddressFrom);
+		              console.log("Args function incorrect address format: ", config.iotaSeedKey);
 		              callback = null;
 	              }
               return callback;

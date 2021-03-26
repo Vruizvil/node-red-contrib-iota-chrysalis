@@ -122,7 +122,7 @@ module.exports = function(RED) {
                 case 'NewWallet':
 	                break;
                 case 'SendTokens':
-                  fromSeed = config.iotaAddressFrom;
+                  fromSeed = config.iotaSeedKey;
                   addressTo = config.iotaAddressTo;
                   amountToSend = config.iotaValue;
                   messageKey = "node-red-contrib-iota-Chrysalis";

@@ -119,7 +119,7 @@ module.exports = function(RED) {
               this.readyIota = false;
               var self = this;
               switch (config.iotaSelect){
-                case 'NewWallet':
+                case 'CreateSeed':
 	                break;
                 case 'SendTokens':
                   fromSeed = config.iotaSeedKey;

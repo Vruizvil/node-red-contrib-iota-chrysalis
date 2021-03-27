@@ -19,7 +19,9 @@
   "license": "MIT",
   "dependencies": {
     "@iota/iota.js": "iotaledger/iota.js#chrysalis",
-    "transliteration": "^2.2.0"
+    "@iota/wallet": "iotaledger/wallet.rs#nodejs-binding-v0.0.6",
+    "transliteration": "^2.2.0",
+    "dotenv": "*"
   },
   "repository": {
     "type": "git",

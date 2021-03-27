@@ -21,7 +21,7 @@
     "@iota/iota.js": "iotaledger/iota.js#chrysalis",
     "@iota/wallet": "iotaledger/wallet.rs#nodejs-binding-v0.0.6",
     "transliteration": "^2.2.0",
-    "dotenv": "*"
+    "dotenv": "^8.2.0"
   },
   "repository": {
     "type": "git",

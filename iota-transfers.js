@@ -109,9 +109,17 @@ module.exports = function(RED) {
 
                    await iotajs.send(client, walletSeed, 0, bech_ad, amount, submitMessage).then(success,error);
                    //await iotajs.sendMultiple(client, walletSeed,0, jsonOutputs, submitMessage).then(success,error);
+             }
 
+             async function run_getbalance(fromSeed) {
+                   //Prepare Wallet Seed
+                   const walletSeed = new iotajs.Ed25519Seed(iotajs.Converter.hexToBytes(fromSeed));
                    const walletBalance = await iotajs.getBalance(client, walletSeed, 0);
-                   console.log("Wallet Address Balance", walletBalance);
+                   //console.log("Wallet Balance", walletBalance);
+                   const allUnspentAddresses = await iotajs.getUnspentAddresses(client, walletSeed, 0);
+                   //console.log("Wallet Unspent Addresses", allAddresses);
+                   callback = { balance : walletBalance, UnspentAddresses: allUnspentAddresses};
+                   success(callback);
              }
 
             if (this.readyIota) {
@@ -119,7 +127,9 @@ module.exports = function(RED) {
               this.readyIota = false;
               var self = this;
               switch (config.iotaSelect){
-                case 'CreateSeed':
+                case 'GetBalanceSeed':
+                  fromSeed = config.iotaSeedKey;
+                  run_getbalance(fromSeed);
 	                break;
                 case 'SendTokens':
                   fromSeed = config.iotaSeedKey;

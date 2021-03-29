@@ -160,7 +160,7 @@ module.exports = function(RED) {
                           i--;
                         }
                    }
-                  //console.log("All ", num_addresses_to_create, "New Addresses: ", allNewAddresses);
+                  console.log("All ", num_addresses_to_create, "New Addresses: ", allNewAddresses);
                    success(allNewAddresses);
              }
 

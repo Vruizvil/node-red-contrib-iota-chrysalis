@@ -118,8 +118,50 @@ module.exports = function(RED) {
                    //console.log("Wallet Balance", walletBalance);
                    const allUnspentAddresses = await iotajs.getUnspentAddresses(client, walletSeed, 0);
                    //console.log("Wallet Unspent Addresses", allAddresses);
-                   callback = { balance : walletBalance, UnspentAddresses: allUnspentAddresses};
+                   callback = { totalbalance : walletBalance, UnspentAddresses: allUnspentAddresses};
                    success(callback);
+             }
+
+             async function run_newaddresses(fromSeed, num_addresses_to_create) {
+                   //Prepare Wallet Seed
+                   if (isEmpty(num_addresses_to_create)) { num_addresses_to_create = 1 };
+                   const walletSeed = new iotajs.Ed25519Seed(iotajs.Converter.hexToBytes(fromSeed));
+                   const addressGeneratorAccountState = {
+                        accountIndex: 0,
+                        addressIndex: 0,
+                        isInternal: false
+                    };
+                    const allUspentAddresses = await iotajs.getUnspentAddresses(client, walletSeed, 0);
+                    allNewAddresses = [];
+                    function is_Upspent(addr) {
+                            is = false;
+                            for (let x = 0; x < allUspentAddresses.length; x++) {
+                                    if (allUspentAddresses[x].address === addr) {
+                                     is = true;
+                                     x = allUspentAddresses.length }
+                            }
+                            return is;
+                    }
+                    for (let i = 0; i < num_addresses_to_create; i++) {
+                      const path = iotajs.generateBip44Address(addressGeneratorAccountState, i === 0);
+                      const addressSeed = walletSeed.generateSeedFromPath(new iotajs.Bip32Path(path));
+                      const addressKeyPair = addressSeed.keyPair();
+                      const indexEd25519Address = new iotajs.Ed25519Address(addressKeyPair.publicKey);
+                      const indexPublicKeyAddress = indexEd25519Address.toAddress();
+                      addressHex = iotajs.Converter.bytesToHex(indexPublicKeyAddress);
+                      addressBech32 = iotajs.Bech32Helper.toBech32(iotajs.ED25519_ADDRESS_TYPE, indexPublicKeyAddress, nodeInfo.bech32HRP);
+                      if (!is_Upspent(addressBech32)) {
+                        allNewAddresses[i] = { "address" : addressHex,
+                          "addressBech32" : addressBech32,
+                          "path" : path,
+                          "keyPair" : addressKeyPair
+                        }
+                      } else {
+                          i--;
+                        }
+                   }
+                  //console.log("All ", num_addresses_to_create, "New Addresses: ", allNewAddresses);
+                   success(allNewAddresses);
              }
 
             if (this.readyIota) {
@@ -131,6 +173,11 @@ module.exports = function(RED) {
                   fromSeed = config.iotaSeedKey;
                   run_getbalance(fromSeed);
 	                break;
+                case 'NewAddresses':
+                  fromSeed = config.iotaSeedKey;
+                  num_addresses = config.iotaValue;
+                  run_newaddresses(fromSeed,num_addresses);
+                  break;
                 case 'SendTokens':
                   fromSeed = config.iotaSeedKey;
                   addressTo = config.iotaAddressTo;

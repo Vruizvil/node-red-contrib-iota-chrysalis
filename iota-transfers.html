@@ -4,9 +4,9 @@
         color: '#3FADB5',
         defaults: {
             iotaNode: {value: "", type:"iotaserver"},
-	          iotaSeedKey: {value: "atoi1qrtfsyxn6l3yt6hprxgwvkq9ph98x6ykk6xaaxyk5wwzpldxmkkac2s3rvy"},
+	          iotaSeedKey: {value: ""},
             iotaAddressTo: {value: ""},
-            iotaValue: {value: 1000000},
+            iotaValue: {value: 0},
             iotaMessage: {value: "message from node-red"},
             iotaSelect: {value: "SendTokens"},
             name: {value:""}
@@ -30,6 +30,7 @@
     <label for="node-function-iotaSelect"><i class="icon-tag"></i> Select Function</label>
       <select id="node-input-iotaSelect">
           <option value="GetBalanceSeed">GetBalanceSeed</option>
+          <option value="NewAddresses">NewAddresses</option>
           <option value="SendTokens">SendTokens</option>
       </select>
     </div>

@@ -149,7 +149,7 @@ module.exports = function(RED) {
                       const indexEd25519Address = new iotajs.Ed25519Address(addressKeyPair.publicKey);
                       const indexPublicKeyAddress = indexEd25519Address.toAddress();
                       addressHex = iotajs.Converter.bytesToHex(indexPublicKeyAddress);
-                      addressBech32 = iotajs.Bech32Helper.toBech32(iotajs.ED25519_ADDRESS_TYPE, indexPublicKeyAddress, nodeInfo.bech32HRP);
+                      addressBech32 = iotajs.Bech32Helper.toBech32(iotajs.ED25519_ADDRESS_TYPE, indexPublicKeyAddress, node.bech32HRP);
                       if (!is_Upspent(addressBech32)) {
                         allNewAddresses[i] = { "address" : addressHex,
                           "addressBech32" : addressBech32,
@@ -176,6 +176,7 @@ module.exports = function(RED) {
                 case 'NewAddresses':
                   fromSeed = config.iotaSeedKey;
                   num_addresses = config.iotaValue;
+                  if (num_addresses = 0) { num_addresses = 1};
                   run_newaddresses(fromSeed,num_addresses);
                   break;
                 case 'SendTokens':

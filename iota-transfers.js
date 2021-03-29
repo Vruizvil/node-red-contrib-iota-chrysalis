@@ -175,8 +175,8 @@ module.exports = function(RED) {
 	                break;
                 case 'NewAddresses':
                   fromSeed = config.iotaSeedKey;
-                  num_addresses = config.iotaValue;
-                  if (num_addresses = 0) { num_addresses = 1};
+                  num_addresses = parseInt(config.iotaValue);
+                  if (num_addresses === 0) { num_addresses = 1};
                   run_newaddresses(fromSeed,num_addresses);
                   break;
                 case 'SendTokens':

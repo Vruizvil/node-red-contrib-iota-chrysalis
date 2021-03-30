@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-iota-chrysalis",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Node Red integration whith IOTA for Chrysalis",
   "main": "iota-info.js",
   "scripts": {
@@ -24,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Vruizvil/node-red-contrib-iota-Chrysalis.git"
+    "url": "https://github.com/Vruizvil/node-red-contrib-iota-chrysalis.git"
   },
   "keywords": [
     "node-red",

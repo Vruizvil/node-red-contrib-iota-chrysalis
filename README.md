@@ -9,7 +9,7 @@ This package needs nodejs version 12 or latest.
 You can install node-red-contrib-iota-chrysalis from node-red Manage palette or if you prefer CLI,
 you can use this command:
 
-  npm install @vruizvil/node-red-contrib-iota-chrysalis
+  npm install node-red-contrib-iota-chrysalis
 
-This sample flow, you can import in your node-red: 
-https://raw.githubusercontent.com/Vruizvil/node-red-contrib-iota-chrysalis/main/sample_flows.json
+There are samples flows, you can import in your node-red:
+https://github.com/Vruizvil/node-red-contrib-iota-chrysalis/tree/main/sample_flows/

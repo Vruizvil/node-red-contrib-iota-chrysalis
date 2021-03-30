@@ -90,21 +90,22 @@
 
    <h3>Details</h3>
        <p><code>msg.payload</code> is used as the payload of the node.
+       If payload is string will be used as seedkey field.
        If it contains an JSON object are used as value fields.
-       <p><code>
-         payload = {
-           seedkey : String or Hex,
-           addressto : String or Hex,
-           amounttosend : Integer,
-           messageKey : String. Default value is "node-red-contrib-iota-chrysalis",
-           messagedata : String or Json
-         }
+       <p><code>payload = {
+        <p>   seedkey : String or Hex,
+        <p>   addressto : String or Hex,
+        <p>   amounttosend : Integer,
+        <p>   messageKey : String.Default value "node-red-contrib-iota-chrysalis",
+        <p>   messagedata : String or Json
+        <p>}
        </code></p>
        </p>
 
    <h3>References</h3>
        <ul>
-           <li><a>GitHub</a> - <p>Read more about iota.js API: <a href="https://github.com/iotaledger/iota.js/tree/chrysalis/docs" target="_blank">here</a>.</p></li>
+           <li><a href = "https://github.com/iotaledger/iota.js/tree/chrysalis/docs"> GitHub</a>
+           <p>Read more about iota.js API.</p></li>
        </ul>
 
 </script>

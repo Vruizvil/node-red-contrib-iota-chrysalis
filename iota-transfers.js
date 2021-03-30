@@ -56,20 +56,20 @@ module.exports = function(RED) {
             function see_args(callback) {
               switch (config.iotaSelect) {
                 case 'GetBalanceSeed':
-                  callback = {
-                    seedkey : (isEmpty(msg.payload) ? config.iotaSeedKey : msg.payload)
-                  }
+                 callback = {
+                   seedkey : (isEmpty(msg.payload.seedkey) ? (isEmpty(msg.payload) ? config.iotaSeedKey : msg.payload) : msg.payload.seedkey)
+                 }
                 break;
                 case 'NewAddresses':
                   callback = {
-                    seedkey : (isEmpty(msg.payload.seddkey) ? config.iotaSeedKey : msg.payload.seedkey),
+                    seedkey : (isEmpty(msg.payload.seedkey) ? (isEmpty(msg.payload) ? config.iotaSeedKey : msg.payload) : msg.payload.seedkey),
                     num_addresses : (isEmpty(msg.payload.num_addresses) ? 1 : msg.payload.num_addresses)
                   }
                 break;
                 case 'SendTokens':
                   callback = {
                     seedkey : (isEmpty(msg.payload.seedkey) ? config.iotaSeedKey : msg.payload.seedkey),
-                    addressto : (isEmpty(msg.payload.addressto) ? config.iotaAddressTo : msg.payload.addressto),
+                    addressto : (isEmpty(msg.payload.addressto) ? (isEmpty(msg.payload) ? config.iotaAddressTo : msg.payload) : msg.payload.addressto),
                     amounttosend : (isEmpty(msg.payload.value) ? config.iotaValue : msg.payload.value),
                     messageKey : (isEmpty(msg.payload.messagekey) ? "node-red-contrib-iota-chrysalis" : msg.payload.messagekey),
                     messagedata : (isEmpty(msg.payload.messagedata) ? config.iotaMessage : msg.payload.messagedata)
@@ -174,7 +174,7 @@ module.exports = function(RED) {
                           //i--;
                         }
                    }
-                  console.log("All ", num_addresses_to_create, "New Addresses: ", allNewAddresses);
+                  //console.log("All ", num_addresses_to_create, "New Addresses: ", allNewAddresses);
                   success(allNewAddresses);
                   return allNewAddresses;
              }

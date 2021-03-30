@@ -120,28 +120,31 @@ module.exports = function(RED) {
                    //console.log("Wallet Unspent Addresses", allAddresses);
                    callback = { totalbalance : walletBalance, UnspentAddresses: allUnspentAddresses};
                    success(callback);
+                   return callback;
              }
 
              async function run_newaddresses(fromSeed, num_addresses_to_create) {
                    //Prepare Wallet Seed
+                   console.log("inside run_newaddresses. Seed: ", fromSeed, "Num NewAddresses: ", num_addresses_to_create);
                    const walletSeed = new iotajs.Ed25519Seed(iotajs.Converter.hexToBytes(fromSeed));
                    const addressGeneratorAccountState = {
                         accountIndex: 0,
                         addressIndex: 0,
                         isInternal: false
                     };
-                    const allUspentAddresses = await iotajs.getUnspentAddresses(client, walletSeed, 0);
+                    const allUnspentAddresses = await iotajs.getUnspentAddresses(client, walletSeed, 0);
                     allNewAddresses = [];
-                    function is_Upspent(addr) {
+                    console.log("Calculated AllUnspentAddresses: ",allUnspentAddresses);
+                    function is_Unspent(addr) {
                             is = false;
-                            for (let x = 0; x < allUspentAddresses.length; x++) {
-                                    if (allUspentAddresses[x].address === addr) {
+                            for (let x = 0; x < allUnspentAddresses.length; x++) {
+                                    if (allUnspentAddresses[x].address === addr) {
                                      is = true;
-                                     x = allUspentAddresses.length }
+                                     x = allUnspentAddresses.length }
                             }
                             return is;
                     }
-                    for (let i = 0; i < num_addresses_to_create; i++) {
+                    for (let i = 0; allNewAddresses.length < num_addresses_to_create; i++) {
                       const path = iotajs.generateBip44Address(addressGeneratorAccountState, i === 0);
                       const addressSeed = walletSeed.generateSeedFromPath(new iotajs.Bip32Path(path));
                       const addressKeyPair = addressSeed.keyPair();
@@ -149,18 +152,19 @@ module.exports = function(RED) {
                       const indexPublicKeyAddress = indexEd25519Address.toAddress();
                       addressHex = iotajs.Converter.bytesToHex(indexPublicKeyAddress);
                       addressBech32 = iotajs.Bech32Helper.toBech32(iotajs.ED25519_ADDRESS_TYPE, indexPublicKeyAddress, node.bech32HRP);
-                      if (!is_Upspent(addressBech32)) {
+                      if (!is_Unspent(addressBech32)) {
                         allNewAddresses[i] = { "address" : addressHex,
                           "addressBech32" : addressBech32,
                           "path" : path,
                           "keyPair" : addressKeyPair
                         }
                       } else {
-                          i--;
+                          //i--;
                         }
                    }
                   console.log("All ", num_addresses_to_create, "New Addresses: ", allNewAddresses);
-                  // success(allNewAddresses);
+                  success(allNewAddresses);
+                  return allNewAddresses;
              }
 
             if (this.readyIota) {
@@ -177,7 +181,7 @@ module.exports = function(RED) {
                   //num_addresses = parseInt(config.iotaValue);
                   num_addresses = 1;
                   //if (num_addresses === 0 || num_addresses == null) { num_addresses = 1 };
-                  run_newaddresses(fromSeed,num_addresses).then(success,error);
+                  run_newaddresses(fromSeed,num_addresses);
                   break;
                 case 'SendTokens':
                   fromSeed = config.iotaSeedKey;

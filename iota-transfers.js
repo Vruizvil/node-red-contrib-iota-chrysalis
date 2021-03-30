@@ -153,7 +153,7 @@ module.exports = function(RED) {
                       addressHex = iotajs.Converter.bytesToHex(indexPublicKeyAddress);
                       addressBech32 = iotajs.Bech32Helper.toBech32(iotajs.ED25519_ADDRESS_TYPE, indexPublicKeyAddress, node.bech32HRP);
                       if (!is_Unspent(addressBech32)) {
-                        allNewAddresses[i] = { "address" : addressHex,
+                        allNewAddresses[allNewAddresses.length] = { "address" : addressHex,
                           "addressBech32" : addressBech32,
                           "path" : path,
                           "keyPair" : addressKeyPair

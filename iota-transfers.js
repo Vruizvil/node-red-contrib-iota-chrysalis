@@ -54,16 +54,28 @@ module.exports = function(RED) {
 	          }
 
             function see_args(callback) {
-		            callback= msg.payload;
- 		             //console.log("init see_args: ", callback);
-                if (isEmpty(callback)) {
-                  callback = config.iotaSeedKey;
-                }
-	              if (isEmpty(callback)) {
-		              console.log("msg.payload incorrect address format: ", msg.payload);
-		              console.log("Args function incorrect address format: ", config.iotaSeedKey);
-		              callback = null;
-	              }
+              switch (config.iotaSelect) {
+                case 'GetBalanceSeed':
+                  callback = {
+                    seedkey : (isEmpty(msg.payload) ? config.iotaSeedKey : msg.payload)
+                  }
+                break;
+                case 'NewAddresses':
+                  callback = {
+                    seedkey : (isEmpty(msg.payload.seddkey) ? config.iotaSeedKey : msg.payload.seedkey),
+                    num_addresses : (isEmpty(msg.payload.num_addresses) ? 1 : msg.payload.num_addresses)
+                  }
+                break;
+                case 'SendTokens':
+                  callback = {
+                    seedkey : (isEmpty(msg.payload.seedkey) ? config.iotaSeedKey : msg.payload.seedkey),
+                    addressto : (isEmpty(msg.payload.addressto) ? config.iotaAddressTo : msg.payload.addressto),
+                    amounttosend : (isEmpty(msg.payload.value) ? config.iotaValue : msg.payload.value),
+                    messageKey : (isEmpty(msg.payload.messagekey) ? "node-red-contrib-iota-chrysalis" : msg.payload.messagekey),
+                    messagedata : (isEmpty(msg.payload.messagedata) ? config.iotaMessage : msg.payload.messagedata)
+                  }
+                break;
+              }
               return callback;
             }
 
@@ -173,23 +185,23 @@ module.exports = function(RED) {
               var self = this;
               switch (config.iotaSelect){
                 case 'GetBalanceSeed':
-                  fromSeed = config.iotaSeedKey;
-                  run_getbalance(fromSeed);
+                  args = see_args();
+                  run_getbalance(args.seedkey);
 	                break;
                 case 'NewAddresses':
-                  fromSeed = config.iotaSeedKey;
-                  //num_addresses = parseInt(config.iotaValue);
-                  num_addresses = 1;
-                  //if (num_addresses === 0 || num_addresses == null) { num_addresses = 1 };
-                  run_newaddresses(fromSeed,num_addresses);
+                  args = see_args();
+                  //fromSeed = config.iotaSeedKey;
+                  //num_addresses = 1;
+                  run_newaddresses(args.seedkey,args.num_addresses);
                   break;
                 case 'SendTokens':
-                  fromSeed = config.iotaSeedKey;
-                  addressTo = config.iotaAddressTo;
-                  amountToSend = config.iotaValue;
-                  messageKey = "node-red-contrib-iota-Chrysalis";
-                  messageData = config.iotaMessage;
-                  run_transfer(fromSeed, addressTo, amountToSend, messageKey, messageData);
+                  args = see_args();
+                  //fromSeed = config.iotaSeedKey;
+                  //addressTo = config.iotaAddressTo;
+                  //amountToSend = config.iotaValue;
+                  //messageKey = "node-red-contrib-iota-Chrysalis";
+                  //messageData = config.iotaMessage;
+                  run_transfer(args.seedkey, args.addressto, args.amounttosend, args.messagekey, args.messagedata);
                   break;
                 }
                 //this.status(orig_status);

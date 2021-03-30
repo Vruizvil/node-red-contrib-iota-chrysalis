@@ -137,7 +137,7 @@ module.exports = function(RED) {
 
              async function run_newaddresses(fromSeed, num_addresses_to_create) {
                    //Prepare Wallet Seed
-                   console.log("inside run_newaddresses. Seed: ", fromSeed, "Num NewAddresses: ", num_addresses_to_create);
+                   //console.log("inside run_newaddresses. Seed: ", fromSeed, "Num NewAddresses: ", num_addresses_to_create);
                    const walletSeed = new iotajs.Ed25519Seed(iotajs.Converter.hexToBytes(fromSeed));
                    const addressGeneratorAccountState = {
                         accountIndex: 0,
@@ -146,7 +146,7 @@ module.exports = function(RED) {
                     };
                     const allUnspentAddresses = await iotajs.getUnspentAddresses(client, walletSeed, 0);
                     allNewAddresses = [];
-                    console.log("Calculated AllUnspentAddresses: ",allUnspentAddresses);
+                    //console.log("Calculated AllUnspentAddresses: ",allUnspentAddresses);
                     function is_Unspent(addr) {
                             is = false;
                             for (let x = 0; x < allUnspentAddresses.length; x++) {

@@ -67,13 +67,7 @@
                <span class="property-type">string | json</span>
            </dt>
            <dd> the payload injected for seedkey field, or json format:
-             payload = {
-               seedkey : String or Hex,
-               addressto : String or Hex,
-               amounttosend : Integer,
-               messageKey : String. Default value is "node-red-contrib-iota-chrysalis",
-               messagedata : String or Json
-             } </dd>
+           </dd>
            <dt class="optional">topic <span class="property-type">string</span></dt>
            <dd> topic value not used.</dd>
        </dl>
@@ -97,7 +91,15 @@
    <h3>Details</h3>
        <p><code>msg.payload</code> is used as the payload of the node.
        If it contains an JSON object are used as value fields.
-       If it contains a binary Buffer the message will be published as-is.</p>
+       <p><code>
+         payload = {
+           seedkey : String or Hex,
+           addressto : String or Hex,
+           amounttosend : Integer,
+           messageKey : String. Default value is "node-red-contrib-iota-chrysalis",
+           messagedata : String or Json
+         }
+       </code></p>
        </p>
 
    <h3>References</h3>

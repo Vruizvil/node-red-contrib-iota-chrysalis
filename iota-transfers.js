@@ -124,7 +124,6 @@ module.exports = function(RED) {
 
              async function run_newaddresses(fromSeed, num_addresses_to_create) {
                    //Prepare Wallet Seed
-                   if (isEmpty(num_addresses_to_create)) { num_addresses_to_create = 1 };
                    const walletSeed = new iotajs.Ed25519Seed(iotajs.Converter.hexToBytes(fromSeed));
                    const addressGeneratorAccountState = {
                         accountIndex: 0,
@@ -161,7 +160,7 @@ module.exports = function(RED) {
                         }
                    }
                   console.log("All ", num_addresses_to_create, "New Addresses: ", allNewAddresses);
-                   success(allNewAddresses);
+                  // success(allNewAddresses);
              }
 
             if (this.readyIota) {
@@ -175,10 +174,10 @@ module.exports = function(RED) {
 	                break;
                 case 'NewAddresses':
                   fromSeed = config.iotaSeedKey;
-                  num_addresses = parseInt(config.iotaValue);
-                  num_addresses = 2;
+                  //num_addresses = parseInt(config.iotaValue);
+                  num_addresses = 1;
                   //if (num_addresses === 0 || num_addresses == null) { num_addresses = 1 };
-                  run_newaddresses(fromSeed,num_addresses);
+                  run_newaddresses(fromSeed,num_addresses).then(success,error);
                   break;
                 case 'SendTokens':
                   fromSeed = config.iotaSeedKey;

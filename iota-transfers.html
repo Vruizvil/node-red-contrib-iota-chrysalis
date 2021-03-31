@@ -96,17 +96,14 @@
        <h3>GetBalanceSeed</h3>
        <p>Assume injected msg.payload as String is a <code>seedkey</code> or you can inject Json format like this:</p>
        <p><code>payload = {
-        <p>   seedkey : String or Hex, </p>
-        <p>}
+        <p>   seedkey : String or Hex}
        </code></p>
 
        <h3>NewAddresses</h3>
-       <p>Injected msg.payload as String is <code>seedkey</code> field and default number of new Addresses to create is 1.</p>
+       <p>Injected msg.payload as String is <code>seedkey</code> field and default number of <code>new Addresses to create</code> is 1.</p>
        <p>For better integration, you can inject Json format like this:</p>
        <p><code>payload = {
-        <p>   seedkey : String or Hex,</p>
-        <p>   num_addresses : Integer </p>
-        <p>}
+        <p>   seedkey : String or Hex, num_addresses : Integer}
        </code></p>
 
        <h3>SendTokens</h3>
@@ -114,11 +111,11 @@
        <p>For better integration, you can inject Json format like this:</p>
        </code></p>
        <p><code>payload = {
-        <p>   seedkey : String or Hex,</p>
-        <p>   addressto : String or Hex,</p>
-        <p>   amounttosend : Integer,</p>
-        <p>   messageKey : String.Default "node-red-contrib-iota-chrysalis",</p>
-        <p>   messagedata : String or Json //(only used for SendTokens)</p>
+        <p>   seedkey : String or Hex,
+        <p>   addressto : String or Hex,
+        <p>   amounttosend : Integer,
+        <p>   messageKey : String.Default "node-red-contrib-iota-chrysalis",
+        <p>   messagedata : String or Json //(only used for SendTokens)
         <p>}
        </code></p>
        <p>If a json field not exist, it will be used value field from gui node</p>

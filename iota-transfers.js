@@ -207,6 +207,7 @@ module.exports = function(RED) {
                   //amountToSend = config.iotaValue;
                   //messageKey = "node-red-contrib-iota-Chrysalis";
                   //messageData = config.iotaMessage;
+                  console.log("after see_args: ", args);
                   run_transfer(args.seedkey, args.addressto, args.amounttosend, args.messagekey, args.messagedata);
                   break;
                 }

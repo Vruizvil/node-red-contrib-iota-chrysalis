@@ -38,6 +38,7 @@ module.exports = function(RED) {
             async function success(callback) {
               console.log("Done: ", callback);
               msg.payload=callback;
+              msg.payload.TangleLink="https://explorer.iota.org/chrysalis/message/" + callback.MessageId;
               self.send(msg);
               run_health();
               //return callback;
@@ -56,6 +57,7 @@ module.exports = function(RED) {
 	          }
 
             function see_args(callback) {
+              console.log("inside see_args: ", msg);
               switch (config.iotaSelect) {
                 case 'GetBalanceSeed':
                  callback = {

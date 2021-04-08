@@ -39,6 +39,7 @@ module.exports = function(RED) {
               console.log("Done: ", callback);
               msg.payload=callback;
               self.send(msg);
+              run_health();
               //return callback;
             }
             async function error(callback) {
@@ -46,6 +47,7 @@ module.exports = function(RED) {
               console.error(callback);
               msg.payload=callback;
               self.send(msg);
+              run_health();
               //return callback;
             }
 
@@ -71,7 +73,7 @@ module.exports = function(RED) {
                     seedkey : (isEmpty(msg.payload.seedkey) ? config.iotaSeedKey : msg.payload.seedkey),
                     addressto : (isEmpty(msg.payload.addressto) ? (isEmpty(msg.payload) ? config.iotaAddressTo : msg.payload) : msg.payload.addressto),
                     amounttosend : (isEmpty(msg.payload.value) ? config.iotaValue : msg.payload.value),
-                    messageKey : (isEmpty(msg.payload.messagekey) ? "node-red-contrib-iota-chrysalis" : msg.payload.messagekey),
+                    messagekey : (isEmpty(msg.payload.messagekey) ? "node-red-contrib-iota-chrysalis" : msg.payload.messagekey),
                     messagedata : (isEmpty(msg.payload.messagedata) ? config.iotaMessage : msg.payload.messagedata)
                   }
                 break;
@@ -183,6 +185,7 @@ module.exports = function(RED) {
               console.log("Running iota-transfers...");
               this.readyIota = false;
               var self = this;
+              node.status({fill:"blue",shape:"ring",text:config.iotaSelect});
               switch (config.iotaSelect){
                 case 'GetBalanceSeed':
                   args = see_args();

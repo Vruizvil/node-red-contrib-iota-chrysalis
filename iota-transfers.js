@@ -122,7 +122,7 @@ module.exports = function(RED) {
                    //Prepare Message Payload iotajs.Converter.utf8ToHex(messageKey.toString())
                    var submitMessage = {
                      key: messageKey.toString(),
-                     data: messageData.toString()
+                     data: JSON.stringify(messageData).toString()
                    };
                    //console.log("Submit Message : ", typeof(submitMessage), submitMessage);
 

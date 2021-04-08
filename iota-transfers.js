@@ -120,6 +120,7 @@ module.exports = function(RED) {
                      key: messageKey.toString(),
                      data: messageData.toString()
                    };
+                   console.log("Submit Message : ", typeof(submitMessage), submitMessage);
 
                    await iotajs.send(client, walletSeed, 0, bech_ad, amount, submitMessage).then(success,error);
                    //await iotajs.sendMultiple(client, walletSeed,0, jsonOutputs, submitMessage).then(success,error);

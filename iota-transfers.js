@@ -35,10 +35,16 @@ module.exports = function(RED) {
         }
         run_health();
         node.on('input', function(msg) {
+            function isEmpty(val){
+                return (val === undefined || val == null || val.length <= 0) ? true : false;
+              }
+
             async function success(callback) {
               console.log("Done: ", callback);
+              if (!isEmpty(callback.messageId)) {
+                callback.TangleLink="https://explorer.iota.org/chrysalis/message/" + callback.messageId;
+              }
               msg.payload=callback;
-              msg.payload.TangleLink="https://explorer.iota.org/chrysalis/message/" + callback.messageId;
               self.send(msg);
               run_health();
               //return callback;
@@ -51,10 +57,6 @@ module.exports = function(RED) {
               run_health();
               //return callback;
             }
-
-	          function isEmpty(val){
-	                return (val === undefined || val == null || val.length <= 0) ? true : false;
-	          }
 
             function see_args(callback) {
               console.log("inside see_args: ", msg);

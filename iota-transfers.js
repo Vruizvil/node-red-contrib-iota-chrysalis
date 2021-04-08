@@ -111,7 +111,7 @@ module.exports = function(RED) {
                        isDustAllowance: false }
                        ];
                    jsonOutputs = JSON.stringify(submitOutputs);
-                   console.log("Submit Output : ", typeof(submitOutputs), typeof(jsonOutputs), jsonOutputs);
+                   //console.log("Submit Output : ", typeof(submitOutputs), typeof(jsonOutputs), jsonOutputs);
 
                    amount = parseInt(amountToSend);
 
@@ -120,7 +120,7 @@ module.exports = function(RED) {
                      key: messageKey.toString(),
                      data: messageData.toString()
                    };
-                   console.log("Submit Message : ", typeof(submitMessage), submitMessage);
+                   //console.log("Submit Message : ", typeof(submitMessage), submitMessage);
 
                    await iotajs.send(client, walletSeed, 0, bech_ad, amount, submitMessage).then(success,error);
                    //await iotajs.sendMultiple(client, walletSeed,0, jsonOutputs, submitMessage).then(success,error);
@@ -183,7 +183,7 @@ module.exports = function(RED) {
              }
 
             if (this.readyIota) {
-              console.log("Running iota-transfers...");
+              console.log("Running iota-transfers...", msg);
               this.readyIota = false;
               var self = this;
               node.status({fill:"blue",shape:"ring",text:config.iotaSelect});

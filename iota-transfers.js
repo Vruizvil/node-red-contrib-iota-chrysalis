@@ -74,7 +74,7 @@ module.exports = function(RED) {
                   callback = {
                     seedkey : (isEmpty(msg.payload.seedkey) ? config.iotaSeedKey : msg.payload.seedkey),
                     addressto : (isEmpty(msg.payload.addressto) ? (isEmpty(msg.payload) ? config.iotaAddressTo : msg.payload) : msg.payload.addressto),
-                    amounttosend : (isEmpty(msg.payload.value) ? config.iotaValue : msg.payload.value),
+                    amounttosend : (isEmpty(msg.payload.amounttosend) ? config.iotaValue : msg.payload.amounttosend),
                     messagekey : (isEmpty(msg.payload.messagekey) ? "node-red-contrib-iota-chrysalis" : msg.payload.messagekey),
                     messagedata : (isEmpty(msg.payload.messagedata) ? config.iotaMessage : msg.payload.messagedata)
                   }

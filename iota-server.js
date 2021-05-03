@@ -5,5 +5,6 @@ module.exports = function(RED) {
         this.port = n.port;
         //host and port for iota provider
     }
+    
     RED.nodes.registerType("iotaserver",IotaServer);
 }

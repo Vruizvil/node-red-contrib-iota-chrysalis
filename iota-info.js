@@ -10,7 +10,6 @@ module.exports = function(RED) {
 	      node._firstroot = '';
         var iota_value = '';
         this.iotaNode = RED.nodes.getNode(config.iotaNode);
-
         const client = new iotajs.SingleNodeClient(this.iotaNode.host + ":" + this.iotaNode.port);
         node.readyIota = true;
         async function run_health(callback) {

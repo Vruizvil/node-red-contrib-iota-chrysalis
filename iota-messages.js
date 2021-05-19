@@ -92,7 +92,7 @@ module.exports = function(RED) {
               return callback;
             }
             if (this.readyIota) {
-              console.log("Searching dataset...");
+              console.log("Submitting Message...");
               this.readyIota = false;
               var self = this;
               //var orig_status = this.status();

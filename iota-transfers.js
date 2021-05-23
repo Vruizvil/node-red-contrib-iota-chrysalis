@@ -36,9 +36,9 @@ module.exports = function(RED) {
         }
         run_health();
         node.on('input', function(msg) {
-            function isEmpty(val){
-                return (val === undefined || val == null || val.length <= 0) ? true : false;
-              }
+            function isEmpty(val) {
+              return val === undefined || val == null || val.length <= 0;
+            }
 
             async function success(callback) {
               console.log("Done: ", callback);

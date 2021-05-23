@@ -39,8 +39,8 @@ module.exports = function(RED) {
               self.send(msg);
               //return callback;
             }
-            function isEmpty(val){
-                  return (val === undefined || val == null || val.length <= 0) ? true : false;
+            function isEmpty(val) {
+              return val === undefined || val == null || val.length <= 0;
             }
             async function run_milestone(lmi) {
               lmi = parseInt(config.iotaValue);

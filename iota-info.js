@@ -40,7 +40,7 @@ module.exports = function(RED) {
               //return callback;
             }
             function isEmpty(val) {
-              return val === undefined || val == null || val.length <= 0;
+              return val === undefined || val == null || val.length === 0;
             }
             async function run_milestone(lmi) {
               lmi = parseInt(config.iotaValue);

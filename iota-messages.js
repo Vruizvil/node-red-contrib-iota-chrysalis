@@ -46,7 +46,7 @@ module.exports = function(RED) {
 		    return;
 		  }
                   msg.payload=callback;
-		              console.log("Done : ", callback);
+		  console.log("Done : ", callback);
                   msg.payload.messageId = messageID;
                   msg.payload.payload.index = Buffer.from(callback.payload.index,'hex').toString('ascii');
                   msg.payload.payload.data = Buffer.from(callback.payload.data,'hex').toString('ascii');

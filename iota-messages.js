@@ -8,7 +8,7 @@ module.exports = function(RED) {
         RED.nodes.createNode(this,config);
         var node = this;
         node._sec = 2;
-	      node._firstroot = '';
+        node._firstroot = '';
         var iota_value = '';
         this.iotaNode = RED.nodes.getNode(config.iotaNode);
         const client = new iotajs.SingleNodeClient(this.iotaNode.host + ":" + this.iotaNode.port);
@@ -42,9 +42,9 @@ module.exports = function(RED) {
             }
             async function run_messageId(messageID) {
                   callback = await client.message(messageID).catch(error);
-		  if (!callback || callback.messageIds.length === 0 ) {
-		    return;
-		  }
+                  if (!callback || callback.messageIds.length === 0 ) {
+                    return;
+                  }
                   msg.payload=callback;
 		  console.log("Done : ", callback);
                   msg.payload.messageId = messageID;
@@ -53,12 +53,12 @@ module.exports = function(RED) {
                   self.send(msg);
                   //return callback;
             }
-	          function isEmpty(val){
-	                return val === undefined || val == null || val.length === 0;
-	          }
-	          function isMessageID(val) {
-	                return val.length === 64 && iotajs.Converter.isHex(val);
-	          }
+	    function isEmpty(val){
+	      return val === undefined || val == null || val.length === 0;
+	    }
+	    function isMessageID(val) {
+	      return val.length === 64 && iotajs.Converter.isHex(val);
+	    }
             function see_args(callback) {
 		            callback= msg.payload;
  		             //console.log("init see_args: ", callback);

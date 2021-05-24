@@ -42,9 +42,9 @@ module.exports = function(RED) {
             }
             async function run_messageId(messageID) {
                   callback = await client.message(messageID).catch(error);
-		              if (!callback || callback.messageIds.length === 0 ) {
-		                return;
-		              }
+		  if (!callback || callback.messageIds.length === 0 ) {
+		    return;
+		  }
                   msg.payload=callback;
 		              console.log("Done : ", callback);
                   msg.payload.messageId = messageID;

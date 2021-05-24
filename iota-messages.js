@@ -42,7 +42,7 @@ module.exports = function(RED) {
             }
             async function run_messageId(messageID) {
                   callback = await client.message(messageID).catch(error);
-                  if (!callback || callback.messageIds.length === 0 ) {
+                  if (!callback) {
                     return;
                   }
                   msg.payload=callback;

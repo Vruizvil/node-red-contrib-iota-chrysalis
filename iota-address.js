@@ -49,7 +49,7 @@ module.exports = function(RED) {
             }
 
 	    function isEmpty(val) {
-	      return val === undefined || val == null || val.length <= 0;
+	      return val === undefined || val == null || val.length === 0;
 	    }
 
             async function run_addr(callback) {

@@ -41,7 +41,10 @@ module.exports = function(RED) {
               //return callback;
             }
             async function run_messageId(messageID) {
-                  callback = await client.message(messageID) //.then(success,error);
+                  callback = await client.message(messageID).catch(error);
+		              if (!callback || callback.messageIds.length === 0 ) {
+		                return;
+		              }
                   msg.payload=callback;
 		              console.log("Done : ", callback);
                   msg.payload.messageId = messageID;
@@ -51,7 +54,7 @@ module.exports = function(RED) {
                   //return callback;
             }
 	          function isEmpty(val){
-	                return val === undefined || val == null || val.length <= 0;
+	                return val === undefined || val == null || val.length === 0;
 	          }
 	          function isMessageID(val) {
 	                return val.length === 64 && iotajs.Converter.isHex(val);

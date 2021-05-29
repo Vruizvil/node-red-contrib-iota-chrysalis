@@ -117,8 +117,8 @@ module.exports = function(RED) {
                   if (!isEmpty(addr_from)) {
                      run_addr(addr_from);
                    } else {
-                     msg.payload = "Error: Incorrect Address format";
-                     self.send(msg);
+                     msg_error = "Error: Incorrect Address format";
+                     error(msg_error);
                    }
                   break;
                 case 'AddressOutput':
@@ -127,18 +127,18 @@ module.exports = function(RED) {
                   if (!isEmpty(addr_from)) {
                      run_addr_output(addr_from);
                    } else {
-                     msg.payload = "Error: Incorrect Address format";
-                     self.send(msg);
+                     msg_error = "Error: Incorrect Address format";
+                     error(msg_error);
                    }
                   break;
                 case 'OutputInfo':
                 node.status({fill:"green",shape:"ring",text:"SearchOutputInfo..."});
                   outputID = see_args();
                   if (!isEmpty(outputID)) {
-                     run_output_info(addr_from);
+                     run_output_info(outputID);
                    } else {
-                     msg.payload = "Error: Incorrect Output Id format";
-                     self.send(msg);
+                     msg_error = "Error: Incorrect Output Id format";
+                     error(msg_error);
                    }
                   break;
                 }

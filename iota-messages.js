@@ -44,7 +44,7 @@ module.exports = function(RED) {
             }
             async function run_messageId(messageID) {
                   callback = await client.message(messageID)
-                    .then((callback) => { 
+                    .then((callback) => {
                       console.log("Done run_messageId")
                       callback2=callback;
                       callback2.messageId = messageID;
@@ -142,7 +142,7 @@ module.exports = function(RED) {
                   if (!isEmpty(messageID)) {
                      client.messageChildren(messageID).then(success,error);
                    } else {
-                     msg_error="Error: Incorrect messageID format";
+                     msg_error = "Error: Incorrect messageID format";
                      //self.send(msg);
                      error(msg_error);
                    }
@@ -154,7 +154,7 @@ module.exports = function(RED) {
                     //console.log(messageToFind);
                     client.messagesFind(iotajs.Converter.utf8ToBytes(messageToFind)).then(success,error);
                   } else {
-                    msg_error="Error: Incorrect message to find format";
+                    msg_error = "Error: Incorrect message to find format";
                     //self.send(msg);
                     error(msg_error);
                   }
@@ -165,7 +165,7 @@ module.exports = function(RED) {
 		              if (!isEmpty(messageID) && isMessageID(messageID)) {
 			                 run_messageId(messageID);
 		              } else {
-			                 msg_error="Error: Incorrect messageID format";
+			                 msg_error = "Error: Incorrect messageID format";
 			                 //self.send(msg);
                        error(msg_error);
 			            }

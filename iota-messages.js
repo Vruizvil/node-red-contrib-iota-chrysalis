@@ -58,8 +58,9 @@ module.exports = function(RED) {
                     })
                     .catch((err) => {
                       console.log("Inside run_messageId catch error.");
-                      iotajs.retrieveData(client,messageID).then(success,error);;
-                      //error(err);
+                      msg_error = "TO DO: messageId is from token transaction not form submitMessage.";
+                      //iotajs.retrieveData(client,messageID).then(success,error);;
+                      error(msg_error);
                     });
             }
 	          function isEmpty(val) {

@@ -161,7 +161,7 @@ module.exports = function(RED) {
                 case 'messageID':
                   node.status({fill:"red",shape:"ring",text:"SearchMessageID..."});
 		              messageID = see_args()
-		              if (!isEmpty(messageID)) {
+		              if (!isEmpty(messageID) && isMessageID(messageID)) {
 			                 run_messageId(messageID);
 		              } else {
 			                 msg_error="Error: Incorrect messageID format";

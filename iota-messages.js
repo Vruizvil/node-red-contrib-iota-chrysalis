@@ -153,7 +153,8 @@ module.exports = function(RED) {
                     client.messagesFind(iotajs.Converter.utf8ToBytes(messageToFind)).then(success,error);
                   } else {
                     msg.payload="Error: Incorrect message to find format";
-                    self.send(msg);
+                    //self.send(msg);
+                    error(msg);
                   }
                   break;
                 case 'messageID':
@@ -163,7 +164,8 @@ module.exports = function(RED) {
 			                 run_messageId(messageID);
 		              } else {
 			                 msg.payload="Error: Incorrect messageID format";
-			                 self.send(msg);
+			                 //self.send(msg);
+                       error(msg);
 			            }
                   break;
                 case 'messageSubmit':

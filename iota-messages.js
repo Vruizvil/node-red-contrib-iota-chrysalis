@@ -45,11 +45,16 @@ module.exports = function(RED) {
             async function run_messageId(messageID) {
                   callback = await client.message(messageID) //.then(success,error);
                   msg.payload=callback;
-		              console.log("Done : ", callback);
                   msg.payload.messageId = messageID;
-                  msg.payload.payload.index = Buffer.from(callback.payload.index,'hex').toString('ascii');
-                  msg.payload.payload.data = Buffer.from(callback.payload.data,'hex').toString('ascii');
-                  self.send(msg);
+		              //console.log("Done : ", callback);
+                  if (msg.payload.type === 2) {
+                    msg.payload.payload.index = Buffer.from(callback.payload.index,'hex').toString('ascii');
+                    msg.payload.payload.data = Buffer.from(callback.payload.data,'hex').toString('ascii');
+                    success(msg)
+                  } else {
+                    error(msg);
+                  }
+                  //self.send(msg);
                   //return callback;
             }
 	          function isEmpty(val){

@@ -43,7 +43,7 @@ module.exports = function(RED) {
               //return callback;
             }
             async function run_messageId(messageID) {
-                  callback = await client.message(messageID) //.then(success,error);
+                  callback = await client.message(messageID).then(run_health,run_health);
                   //callback2 = msg;
                   callback2=callback;
                   callback2.messageId = messageID;

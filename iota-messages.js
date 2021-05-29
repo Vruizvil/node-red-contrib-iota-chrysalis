@@ -43,20 +43,21 @@ module.exports = function(RED) {
               //return callback;
             }
             async function run_messageId(messageID) {
-                  callback = await client.message(messageID).then(run_health,run_health);
-                  //callback2 = msg;
-                  callback2=callback;
-                  callback2.messageId = messageID;
-		              console.log("Inside run_messageId : ", callback);
-                  if (callback.payload.type == 2) {
-                    callback2.payload.index = Buffer.from(callback.payload.index,'hex').toString('ascii');
-                    callback2.payload.data = Buffer.from(callback.payload.data,'hex').toString('ascii');
-                    success(callback2)
-                  } else {
-                    error(callback2);
-                  }
-                  //self.send(msg);
-                  //return callback;
+                  callback = await client.message(messageID)
+                    .then(() => { 
+                      console.log("Done run_messageId")
+                      callback2=callback;
+                      callback2.messageId = messageID;
+    		              console.log("Inside run_messageId : ", callback);
+                      if (callback.payload.type == 2) {
+                        callback2.payload.index = Buffer.from(callback.payload.index,'hex').toString('ascii');
+                        callback2.payload.data = Buffer.from(callback.payload.data,'hex').toString('ascii');
+                        success(callback2)
+                      } else {
+                        error(callback2);
+                      }
+                    })
+                    .catch((err) => error(err));
             }
 	          function isEmpty(val) {
 	                return (val === undefined || val == null || val.length <= 0) ? true : false;

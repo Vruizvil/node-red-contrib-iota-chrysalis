@@ -44,13 +44,13 @@ module.exports = function(RED) {
             }
             async function run_messageId(messageID) {
                   callback = await client.message(messageID) //.then(success,error);
-                  callback2 = msg;
-                  callback2.payload=callback;
-                  callback2.payload.messageId = messageID;
+                  //callback2 = msg;
+                  callback2=callback;
+                  callback2.messageId = messageID;
 		              console.log("Inside run_messageId : ", callback);
-                  if (callback2.payload.payload.type == 2) {
-                    callback2.payload.payload.index = Buffer.from(callback.payload.index,'hex').toString('ascii');
-                    callback2.payload.payload.data = Buffer.from(callback.payload.data,'hex').toString('ascii');
+                  if (callback.payload.type == 2) {
+                    callback2.payload.index = Buffer.from(callback.payload.index,'hex').toString('ascii');
+                    callback2.payload.data = Buffer.from(callback.payload.data,'hex').toString('ascii');
                     success(callback2)
                   } else {
                     error(callback2);
@@ -141,8 +141,9 @@ module.exports = function(RED) {
                   if (!isEmpty(messageID)) {
                      client.messageChildren(messageID).then(success,error);
                    } else {
-                     msg.payload="Error: Incorrect messageID format";
-                     self.send(msg);
+                     msg_error="Error: Incorrect messageID format";
+                     //self.send(msg);
+                     error(msg_error);
                    }
                   break;
                 case 'messageFind':
@@ -152,9 +153,9 @@ module.exports = function(RED) {
                     //console.log(messageToFind);
                     client.messagesFind(iotajs.Converter.utf8ToBytes(messageToFind)).then(success,error);
                   } else {
-                    msg.payload="Error: Incorrect message to find format";
+                    msg_error="Error: Incorrect message to find format";
                     //self.send(msg);
-                    error(msg);
+                    error(msg_error);
                   }
                   break;
                 case 'messageID':
@@ -163,9 +164,9 @@ module.exports = function(RED) {
 		              if (!isEmpty(messageID)) {
 			                 run_messageId(messageID);
 		              } else {
-			                 msg.payload="Error: Incorrect messageID format";
+			                 msg_error="Error: Incorrect messageID format";
 			                 //self.send(msg);
-                       error(msg);
+                       error(msg_error);
 			            }
                   break;
                 case 'messageSubmit':

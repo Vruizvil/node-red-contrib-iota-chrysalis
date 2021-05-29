@@ -46,8 +46,8 @@ module.exports = function(RED) {
                   callback = await client.message(messageID) //.then(success,error);
                   msg.payload=callback;
                   msg.payload.messageId = messageID;
-		              //console.log("Done : ", callback);
-                  if (msg.payload.type === 2) {
+		              console.log("Inside run_messageId : ", callback);
+                  if (msg.payload.type == 2) {
                     msg.payload.payload.index = Buffer.from(callback.payload.index,'hex').toString('ascii');
                     msg.payload.payload.data = Buffer.from(callback.payload.data,'hex').toString('ascii');
                     success(msg)

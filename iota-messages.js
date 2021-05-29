@@ -58,7 +58,7 @@ module.exports = function(RED) {
                     })
                     .catch((err) => {
                       console.log("Inside run_messageId catch error.");
-                      await iotajs.retrieveData(client,messageID).then(success,error);;
+                      iotajs.retrieveData(client,messageID).then(success,error);;
                       //error(err);
                     });
             }

@@ -59,7 +59,7 @@ module.exports = function(RED) {
                   //return callback;
             }
 	          function isEmpty(val) {
-	                return (val === undefined || val == null || val.length >= 0) ? true : false;
+	                return (val === undefined || val == null || val.length <= 0) ? true : false;
 	          }
 	          function isMessageID(val) {
 	                return (val.length = 64 && iotajs.Converter.isHex(val)) ? true : false;

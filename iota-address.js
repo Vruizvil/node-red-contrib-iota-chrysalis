@@ -86,6 +86,7 @@ module.exports = function(RED) {
 
             async function run_output_info(callback) {
                   outputID = callback
+                  msg.outputId = outputID;
                   client.output(outputID).then(success,error);
              }
 

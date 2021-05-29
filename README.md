@@ -1,6 +1,8 @@
 # node-red-contrib-iota-Chrysalis
 Integration node-red through IOTA.js library (https://github.com/iotaledger/iota.js)
 
+THIS REPO IS EXPERIMENTAL, NOT OFFICIAL SUPPORT FROM IOTA FOUNDATION.
+PLEASE DO NOT USE WITH REAL TOKENS
 
 This package needs nodejs version 12 or latest.
   To check your NPM version use npm version or node --version.

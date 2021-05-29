@@ -44,21 +44,22 @@ module.exports = function(RED) {
             }
             async function run_messageId(messageID) {
                   callback = await client.message(messageID) //.then(success,error);
-                  msg.payload=callback;
-                  msg.payload.messageId = messageID;
+                  callback2 = msg;
+                  callback2.payload=callback;
+                  callback2.payload.messageId = messageID;
 		              console.log("Inside run_messageId : ", callback);
-                  if (msg.payload.type == 2) {
-                    msg.payload.payload.index = Buffer.from(callback.payload.index,'hex').toString('ascii');
-                    msg.payload.payload.data = Buffer.from(callback.payload.data,'hex').toString('ascii');
-                    success(msg)
+                  if (callback2.payload.payload.type == 2) {
+                    callback2.payload.payload.index = Buffer.from(callback.payload.index,'hex').toString('ascii');
+                    callback2.payload.payload.data = Buffer.from(callback.payload.data,'hex').toString('ascii');
+                    success(callback2)
                   } else {
-                    error(msg);
+                    error(callback2);
                   }
                   //self.send(msg);
                   //return callback;
             }
 	          function isEmpty(val){
-	                return (val === undefined || val == null || val.length <= 0) ? true : false;
+	                return (val === undefined || val == null || val.length === 0) ? true : false;
 	          }
 	          function isMessageID(val) {
 	                return (val.length = 64 && iotajs.Converter.isHex(val)) ? true : false;

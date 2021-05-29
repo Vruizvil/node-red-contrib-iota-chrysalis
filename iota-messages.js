@@ -45,19 +45,22 @@ module.exports = function(RED) {
             async function run_messageId(messageID) {
                   callback = await client.message(messageID)
                     .then((callback) => {
-                      console.log("Done run_messageId")
+                      console.log("Inside run_messageId: ",callback);
                       callback2=callback;
                       callback2.messageId = messageID;
-    		              console.log("Inside run_messageId : ", callback);
                       if (callback.payload.type == 2) {
                         callback2.payload.index = Buffer.from(callback.payload.index,'hex').toString('ascii');
                         callback2.payload.data = Buffer.from(callback.payload.data,'hex').toString('ascii');
-                        success(callback2)
+                        success(callback2);
                       } else {
                         error(callback2);
                       }
                     })
-                    .catch((err) => error(err));
+                    .catch((err) => {
+                      console.log("Inside run_messageId catch error.");
+                      await iotajs.retrieveData(client,messageID).then(success,error);;
+                      //error(err);
+                    });
             }
 	          function isEmpty(val) {
 	                return (val === undefined || val == null || val.length <= 0) ? true : false;

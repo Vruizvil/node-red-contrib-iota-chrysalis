@@ -58,11 +58,11 @@ module.exports = function(RED) {
                   //self.send(msg);
                   //return callback;
             }
-	          function isEmpty(val){
-	                return (val === undefined || val == null || val.length === 0) ? true : false;
+	          function isEmpty(val) {
+	                return val === undefined || val == null || val.length >= 0;
 	          }
 	          function isMessageID(val) {
-	                return (val.length = 64 && iotajs.Converter.isHex(val)) ? true : false;
+	                return val.length = 64 && iotajs.Converter.isHex(val);
 	          }
             function see_args(callback) {
               console.log("inside see_args: ", msg);

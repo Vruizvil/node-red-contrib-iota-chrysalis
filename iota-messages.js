@@ -69,7 +69,7 @@ module.exports = function(RED) {
               console.log("inside see_args: ", msg);
               switch (config.iotaSelect) {
                 case 'messageChildren':
-                 callback = (isEmpty(msg.payload.message) ? (isEmpty(msg.payload) ? config.iotaValue : msg.payload) : msg.payload.message);
+                 callback = (isEmpty(msg.payload.messageId) ? (isEmpty(msg.payload) ? config.iotaValue : msg.payload) : msg.payload.messageId);
                  if (isEmpty(callback) || !isMessageID(callback)) {
                   console.log("msg.payload incorrect messageID format: ", msg.payload);
                   console.log("Args function incorrect messageID format: ", config.iotaValue);
@@ -80,7 +80,7 @@ module.exports = function(RED) {
                  callback = (isEmpty(msg.payload.messageToFind) ? (isEmpty(msg.payload) ? config.iotaValue : msg.payload) : msg.payload.messageToFind);
                 break;
                 case 'messageID':
-                 callback = (isEmpty(msg.payload.message) ? (isEmpty(msg.payload) ? config.iotaValue : msg.payload) : msg.payload.message);
+                 callback = (isEmpty(msg.payload.messageId) ? (isEmpty(msg.payload) ? config.iotaValue : msg.payload) : msg.payload.messageId);
                  if (isEmpty(callback) || !isMessageID(callback)) {
                   console.log("msg.payload incorrect messageID format: ", msg.payload);
                   console.log("Args function incorrect messageID format: ", config.iotaValue);

@@ -31,6 +31,7 @@ module.exports = function(RED) {
               console.log("Done: ", callback);
               msg.payload=callback;
               self.send(msg);
+              run_health();
               //return callback;
             }
             async function error(callback) {
@@ -38,6 +39,7 @@ module.exports = function(RED) {
               console.error(callback);
               msg.payload=callback;
               self.send(msg);
+              run_health();
               //return callback;
             }
             async function run_messageId(messageID) {
@@ -57,20 +59,49 @@ module.exports = function(RED) {
 	                return (val.length = 64 && iotajs.Converter.isHex(val)) ? true : false;
 	          }
             function see_args(callback) {
-		            callback= msg.payload;
- 		             //console.log("init see_args: ", callback);
-                if (isEmpty(callback) || !isMessageID(callback)) {
-                  callback = config.iotaValue;
-	                 if (isEmpty(callback) || !isMessageID(callback)){
-		                console.log("msg.payload incorrect messageID format: ", msg.payload);
-		                console.log("Args function incorrect messageID format: ", config.iotaValue);
-		                //callback = Buffer.from('0000000000000000000000000000000000000000000000000000000000000000','hex');
-		                callback = null;
-	                }
+              console.log("inside see_args: ", msg);
+              switch (config.iotaSelect) {
+                case 'messageChildren':
+                 callback = (isEmpty(msg.payload.message) ? (isEmpty(msg.payload) ? config.iotaValue : msg.payload) : msg.payload.message);
+                 if (isEmpty(callback) || !isMessageID(callback)) {
+                  console.log("msg.payload incorrect messageID format: ", msg.payload);
+                  console.log("Args function incorrect messageID format: ", config.iotaValue);
+                  callback = null;
                 }
-                //console.log("end see_args: ", callback);
-                return callback;
+                break;
+                case 'messageFind':
+                 callback = (isEmpty(msg.payload.messageToFind) ? (isEmpty(msg.payload) ? config.iotaValue : msg.payload) : msg.payload.messageToFind);
+                break;
+                case 'messageID':
+                 callback = (isEmpty(msg.payload.message) ? (isEmpty(msg.payload) ? config.iotaValue : msg.payload) : msg.payload.message);
+                 if (isEmpty(callback) || !isMessageID(callback)) {
+                  console.log("msg.payload incorrect messageID format: ", msg.payload);
+                  console.log("Args function incorrect messageID format: ", config.iotaValue);
+                  callback = null;
+                }
+                break;
+                case 'messageSubmit':
+                 messageData = (isEmpty(msg.payload.messageToSubmit) ? (isEmpty(msg.payload) ? config.iotaValue : msg.payload) : msg.payload.messageToSubmit);
+                 messageIndex = (isEmpty(msg.payload.messageIndex) ? ("node-red-contrib-iota-Chrysalis") : msg.payload.messageIndex);
+
+                 let txt = JSON.stringify(messageData);
+                 messageData = TRAN.transliterate(txt);
+                 console.log("Done: ", messageData);
+                 const submitMessage = {
+                 // Parents can be left undefined if you want the node to populate the field
+                 //parentMessageIds: client.tips().tipMessageIds.slice(0, iota_js_1.MAX_NUMBER_PARENTS),
+                 payload: {
+                   type: iotajs.INDEXATION_PAYLOAD_TYPE,
+                   index: iotajs.Converter.utf8ToHex(messageIndex),
+                   data: iotajs.Converter.utf8ToHex(messageData)
+                   }
+                 };
+                 callback = submitMessage;
+                break;
+              }
+              return callback;
             }
+
             function see_message(callback) {
               messageData = config.iotaValue;
               if (!isEmpty(msg.payload)) {
@@ -92,13 +123,14 @@ module.exports = function(RED) {
               return callback;
             }
             if (this.readyIota) {
-              console.log("Searching dataset...");
+              console.log("Running iota-messages...");
               this.readyIota = false;
               var self = this;
               //var orig_status = this.status();
               //this.status({fill:"blue",shape:"ring",text:"connecting"});
               switch (config.iotaSelect){
                 case 'messageChildren':
+                node.status({fill:"red",shape:"ring",text:"SearchChildren..."});
                   messageID = see_args()
                   if (!isEmpty(messageID)) {
                      client.messageChildren(messageID).then(success,error);
@@ -108,14 +140,18 @@ module.exports = function(RED) {
                    }
                   break;
                 case 'messageFind':
-                  messageToFind = config.iotaValue;
-                  if (!isEmpty(msg.payload)) {
-                    messageToFind = msg.payload;
+                  node.status({fill:"red",shape:"ring",text:"SearchMessageIndex..."});
+                  messageToFind = see_args();
+                  if (!isEmpty(messageToFind)) {
+                    //console.log(messageToFind);
+                    client.messagesFind(iotajs.Converter.utf8ToBytes(messageToFind)).then(success,error);
+                  } else {
+                    msg.payload="Error: Incorrect message to find format";
+                    self.send(msg);
                   }
-                  console.log(messageToFind);
-                  client.messagesFind(iotajs.Converter.utf8ToBytes(messageToFind)).then(success,error);
                   break;
                 case 'messageID':
+                  node.status({fill:"red",shape:"ring",text:"SearchMessageID..."});
 		              messageID = see_args()
 		              if (!isEmpty(messageID)) {
 			                 run_messageId(messageID);
@@ -125,11 +161,11 @@ module.exports = function(RED) {
 			            }
                   break;
                 case 'messageSubmit':
-                  submitMessage = see_message();
+                  node.status({fill:"red",shape:"ring",text:"SubmitMessage..."});
+                  submitMessage = see_args();
                   client.messageSubmit(submitMessage).then(success,error);
                   break;
                 }
-                //this.status(orig_status);
 		            this.readyIota = true;
             }
         });

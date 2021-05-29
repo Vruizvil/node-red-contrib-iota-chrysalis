@@ -38,6 +38,7 @@ module.exports = function(RED) {
               console.log("Done: ", callback);
               msg.payload=callback;
               self.send(msg);
+              run_health();
               //return callback;
             }
             async function error(callback) {
@@ -45,6 +46,7 @@ module.exports = function(RED) {
               console.error(callback);
               msg.payload=callback;
               self.send(msg);
+              run_health();
               //return callback;
             }
 
@@ -82,26 +84,35 @@ module.exports = function(RED) {
                  //return bech_ad;
             }
 
+            async function run_output_info(callback) {
+                  outputID = callback
+                  client.output(outputID).then(success,error);
+             }
+
+
             function see_args(callback) {
-		            callback= msg.payload;
- 		             //console.log("init see_args: ", callback);
-                if (isEmpty(callback))  {
-                  callback = config.iotaAddressFrom;
-                }
-                if (isEmpty(callback)) {
-		                console.log("msg.payload incorrect address format: ", msg.payload);
-		                console.log("Args function incorrect address format: ", config.iotaAddressFrom);
-		                callback = null;
-	                }
-                return callback;
+              console.log("inside see_args: ", msg);
+              switch (config.iotaSelect) {
+                case 'AddressInfo':
+                 callback = (isEmpty(msg.payload.address) ? (isEmpty(msg.payload) ? config.iotaAddressFrom : msg.payload) : msg.payload.address)
+                break;
+                case 'AddressOutput':
+                 callback = (isEmpty(msg.payload.address) ? (isEmpty(msg.payload) ? config.iotaAddressFrom : msg.payload) : msg.payload.address)
+                break;
+                case 'OutputInfo':
+                 callback = (isEmpty(msg.payload.output) ? (isEmpty(msg.payload) ? config.iotaAddressFrom : msg.payload) : msg.payload.output)
+                break;
+              }
+              return callback;
             }
 
             if (this.readyIota) {
-              console.log("Running iota-transfers...");
+              console.log("Running iota-address...");
               this.readyIota = false;
               var self = this;
               switch (config.iotaSelect){
                 case 'AddressInfo':
+                  node.status({fill:"green",shape:"ring",text:"SearchAddrInfo..."});
                   addr_from = see_args();
                   if (!isEmpty(addr_from)) {
                      run_addr(addr_from);
@@ -111,6 +122,7 @@ module.exports = function(RED) {
                    }
                   break;
                 case 'AddressOutput':
+                  node.status({fill:"green",shape:"ring",text:"SearchAddrOutputs..."});
                   addr_from = see_args();
                   if (!isEmpty(addr_from)) {
                      run_addr_output(addr_from);
@@ -119,8 +131,17 @@ module.exports = function(RED) {
                      self.send(msg);
                    }
                   break;
+                case 'OutputInfo':
+                node.status({fill:"green",shape:"ring",text:"SearchOutputInfo..."});
+                  outputID = see_args();
+                  if (!isEmpty(outputID)) {
+                     run_output_info(addr_from);
+                   } else {
+                     msg.payload = "Error: Incorrect Output Id format";
+                     self.send(msg);
+                   }
+                  break;
                 }
-                //this.status(orig_status);
 		            this.readyIota = true;
             }
         });

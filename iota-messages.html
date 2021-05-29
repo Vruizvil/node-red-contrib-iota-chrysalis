@@ -43,9 +43,70 @@
 </script>
 
 <script type="text/x-red" data-help-name="iotamessages">
-  <p>A node that work with IOTA</p>
+  <p>Connects to IOTA Tangle Chrysalis.</p>
    <b>IOTAnode: </b> Setup IOTA Chrysalis node provider settings like host, port (14265 or 443 - are usual).<br><br>
-   <b>Select Object:</b> Enter yout type of function to search.<br><br>
-  <p>In case of success <code>msg.payload</code> is set to data.</p>
-  <p>Read more about iota.js API: <a href="https://github.com/iotaledger/iota.js/tree/chrysalis/docs" target="_blank">here</a>.</p>
+   <b>Select Function:</b> Enter yout type of function to run.<br><br>
+   <h3>Inputs</h3>
+       <dl class="message-properties">
+           <dt>payload
+               <span class="property-type">string | json</span>
+           </dt>
+           <dd> the payload injected for address or output field:
+           </dd>
+           <dt class="optional">topic <span class="property-type">string</span></dt>
+           <dd> topic value not used.</dd>
+       </dl>
+
+    <h3>Outputs</h3>
+        <ol class="node-ports">
+            <li>Standard output
+                <dl class="message-properties">
+                    <dt>payload <span class="property-type">string | object</span></dt>
+                    <dd>the standard output of the command.</dd>
+                </dl>
+            </li>
+            <li>Standard error
+                <dl class="message-properties">
+                    <dt>payload <span class="property-type">string</span></dt>
+                    <dd>the standard error of the command.</dd>
+                </dl>
+            </li>
+        </ol>
+
+   <h3>Details</h3>
+       <p><code>msg.payload</code> is used as the payload injected of the node.
+       If payload is string will be used as address field.
+       If it contains an JSON object are used as value fields.
+
+       <h3>messageChildren</h3>
+       <p>Assume injected msg.payload as String is a <code>message</code> or you can inject Json format like this:</p>
+       <p><code>payload = {
+        <p>   message : String or Hex}
+       </code></p>
+
+       <h3>messageFind</h3>
+       <p>Assume injected msg.payload as String is a <code>messageToFind</code> or you can inject Json format like this:</p>
+       <p><code>payload = {
+        <p>   messageToFind : String or Hex}
+       </code></p>
+
+       <h3>messageID</h3>
+       <p>Assume injected msg.payload as String is a <code>message</code> or you can inject Json format like this:</p>
+       <p><code>payload = {
+        <p>   message : String or Hex}
+       </code></p>
+
+       <h3>messageSubmit</h3>
+       <p>Assume injected msg.payload as String is a <code>messageToSubmit</code> or you can inject Json format like this:</p>
+       <p><code>payload = {
+        <p>   messageToSubmit : String,
+        <p>   messageIndex: String <code>default value is node-red-contrib-iota-Chrysalis</code>
+        <p>}
+       </code></p>
+
+   <h3>References</h3>
+       <ul>
+           <li><a href = "https://github.com/iotaledger/iota.js/tree/main/docs"> GitHub</a>
+           <p>Read more about iota.js API.</p></li>
+       </ul>
 </script>

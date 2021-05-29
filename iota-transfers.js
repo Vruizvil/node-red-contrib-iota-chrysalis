@@ -43,7 +43,7 @@ module.exports = function(RED) {
             async function success(callback) {
               console.log("Done: ", callback);
               if (!isEmpty(callback.messageId)) {
-                callback.TangleLink="https://explorer.iota.org/chrysalis/message/" + callback.messageId;
+                callback.TangleLink="https://explorer.iota.org/testnet/message/" + callback.messageId;
               }
               msg.payload=callback;
               self.send(msg);
@@ -194,16 +194,19 @@ module.exports = function(RED) {
               node.status({fill:"blue",shape:"ring",text:config.iotaSelect});
               switch (config.iotaSelect){
                 case 'GetBalanceSeed':
+                  node.status({fill:"green",shape:"ring",text:"GetBalance..."});
                   args = see_args();
                   run_getbalance(args.seedkey);
 	                break;
                 case 'NewAddresses':
+                  node.status({fill:"green",shape:"ring",text:"GetNewAddr..."});
                   args = see_args();
                   //fromSeed = config.iotaSeedKey;
                   //num_addresses = 1;
                   run_newaddresses(args.seedkey,args.num_addresses);
                   break;
                 case 'SendTokens':
+                  node.status({fill:"green",shape:"ring",text:"Sending..."});
                   args = see_args();
                   //fromSeed = config.iotaSeedKey;
                   //addressTo = config.iotaAddressTo;
@@ -214,7 +217,6 @@ module.exports = function(RED) {
                   run_transfer(args.seedkey, args.addressto, args.amounttosend, args.messagekey, args.messagedata);
                   break;
                 }
-                //this.status(orig_status);
 		            this.readyIota = true;
             }
         });

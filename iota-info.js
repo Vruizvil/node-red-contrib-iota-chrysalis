@@ -91,7 +91,7 @@ module.exports = function(RED) {
 
 
             if (this.readyIota) {
-              console.log("Searching dataset...");
+              console.log("Runnig iota-info...");
               this.readyIota = false;
               var self = this;
               //this.status({fill:"red",shape:"ring",text:"connecting"});
